@@ -39,6 +39,7 @@ private:
 	void ProcessInput();
 	sf::Vector2i FindTile(sf::Vector2f mouse);
 	sf::Vector2i FindPoint(sf::Vector2f mouse);
+	void FindCoord(sf::Vector2f& mouse);
 	void ProcessKeyInput(sf::Keyboard::Key);
 	//Updates all Engine internals
 	void Update(float speed);

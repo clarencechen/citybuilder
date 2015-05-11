@@ -39,6 +39,7 @@ public:
 	sf::Vector2u GetBuildingTile(unsigned int x, unsigned int y, int z, bool stick);
 
 	void Terraform(int x, int y, int raise);
+	int GetHeightForMouse(int x, int y);
 	void GradeBuilding(sf::IntRect bounds);
 
 	void AddBuilding(unsigned int r, int x, int y, int z, bool preview);

@@ -326,21 +326,27 @@ sf::Vector2u Level::GetBuildingTile(unsigned int x, unsigned int y, int z, bool 
 }
 int(&Level::GetNeighbors(unsigned int x, unsigned int y, int z, bool stick))[4]
 {
-    int nb[4] = {GetId(x, y - 1, z, stick), GetId(x + 1, y, z, stick), GetId(x, y + 1, z, stick), GetId(x - 1, y, z, stick)};
-    return nb;
+	int nb[4] = {GetId(x, y - 1, z, stick), GetId(x + 1, y, z, stick), GetId(x, y + 1, z, stick), GetId(x - 1, y, z, stick)};
+	return nb;
 }
 
 
 void Level::Terraform(int x, int y, int raise)
 {
-    bool valid = GetTile(x - 1, y + 1) && GetTile(x - 1, y) && GetTile(x, y) && GetTile(x, y + 1);
-    if(valid)
-    {
+	bool valid = GetTile(x - 1, y + 1) && GetTile(x - 1, y) && GetTile(x, y) && GetTile(x, y + 1);
+	if(valid)
+	{
         GetTile(x, y)->Raise(raise, 1);
 		GetTile(x, y + 1)->Raise(raise, 0);
 		GetTile(x - 1, y + 1)->Raise(raise, 3);
 		GetTile(x - 1, y)->Raise(raise, 2);
     }
+}
+
+int Level::GetHeightForMouse(int x, int y)
+{
+	if(GetTile(x, y))
+		return GetTile(x, y)->GetHeight()[1];
 }
 
 void Level::GradeBuilding(sf::IntRect bounds)

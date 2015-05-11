@@ -301,23 +301,20 @@ void Engine::ProcessInput()
 
 sf::Vector2i Engine::FindTile(sf::Vector2f mouse)
 {
-	mouse -= view->getSize() / 2.0f;
-	std::cout << mouse.x << "  " << mouse.y << std::endl;
-	sf::Vector2f center(view->getCenter().x, view->getCenter().y);
-	mouse += center;
-	if(stick)
-		mouse.y -= (float)(currentZ*4);
-	mouse /= (float)tilesize;
-	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
-	mouse = inv.transformPoint(mouse.x, mouse.y);
-	mouse += sf::Vector2f(0, 1); //the coordinates are offset 1 to the north
-	std::cout << mouse.x << "  " << mouse.y << std::endl;
-	return sf::Vector2i((int)mouse.x, (int)mouse.y);
+	FindCoord(mouse);
+	//edit later, not completely accurate
+	mouse += sf::Vector2f(-0.5, 0.5);
+	return sf::Vector2i(mouse);
 }
 
 sf::Vector2i Engine::FindPoint(sf::Vector2f mouse)
 {
-	std::cout << mouse.x << "  " << mouse.y << std::endl;
+	FindCoord(mouse);
+	return sf::Vector2i(mouse);
+}
+
+void Engine::FindCoord(sf::Vector2f& mouse)
+{
 	mouse -= view->getSize() / 2.0f;
 	sf::Vector2f center(view->getCenter().x, view->getCenter().y);
 	mouse += center;
@@ -325,9 +322,10 @@ sf::Vector2i Engine::FindPoint(sf::Vector2f mouse)
 	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
 	mouse = inv.transformPoint(mouse.x, mouse.y);
 	mouse += sf::Vector2f(0.5, 0.5);
-	std::cout << mouse.x << "  " << mouse.y << std::endl;
-	return sf::Vector2i((int)mouse.x, (int)mouse.y);
+	int height = currentLevel->GetHeightForMouse((int)mouse.x, (int)mouse.y);
+	mouse += sf::Vector2f(-(float)height/4, (float)height/4);
 }
+
 void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 {
         if(code == sf::Keyboard::Left)
