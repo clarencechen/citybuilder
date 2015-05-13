@@ -35,7 +35,13 @@
 		<tile x="3" y="4" frames="1" size="1" id="43"/>
 
 		<tile x="3" y="5" frames="1" size="1" id="44"/>
-		<tile x="3" y="6" frames="1" size="1" id="45"/>
+		
+		<tile x="4" y="0" frames="1" size="1" id="50"/>
+		<tile x="4" y="1" frames="1" size="1" id="51"/>
+		<tile x="4" y="2" frames="1" size="1" id="52"/>
+
+		<tile x="5" y="1" frames="1" size="1" id="53"/>
+		<tile x="5" y="2" frames="1" size="1" id="54"/>
 	</imagefile>
 	<imagefile path="buildings.png">
 		<tile x="0" y="0" frames="1" size="3" id="128"/>

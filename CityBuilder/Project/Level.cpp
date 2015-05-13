@@ -33,9 +33,9 @@ int Level::GetWidth()
 
 void Level::SetDimensions(int w, int h)
 {
-	map = std::vector<std::vector<TerrainTile*> >(w, std::vector<TerrainTile*>(h, 0));
-	buildings = std::vector<std::vector<Building*> >(w, std::vector<Building*>(h, 0));
-	bridges = std::vector<std::vector<std::vector<Building*> > >(w, std::vector<std::vector<Building*> >(h, std::vector<Building*>(8, 0)));
+	map = std::vector<std::vector<TerrainTile*> >(w, std::vector<TerrainTile*>(h));
+	buildings = std::vector<std::vector<Building*> >(w, std::vector<Building*>(h));
+	bridges = std::vector<std::vector<std::vector<Building*> > >(w, std::vector<std::vector<Building*> >(h, std::vector<Building*>(8)));
 }
 
 void Level::AddTile(int x, int y, TerrainTile* tile)

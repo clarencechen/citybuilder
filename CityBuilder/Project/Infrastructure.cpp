@@ -145,12 +145,9 @@ void Level::MatchRoad(int x, int y, int z, bool stick)
     }
     else if(id == 2)
     {
-        int tally = 0;
-        for(int i = 0; i < 4; i++)
-            if(nb[i] == 2)
-                tally++;
-        if(tally != 0 || (nb[0] == nb[1] == nb[2] == nb[3] == 0))
-            stick ? GetBuilding(x, y)->id = 2 : GetBridge(x, y, z)->id = 2;
+        bool one = (nb[0] != 2 && nb[1] != 2 && nb[2] != 2 && nb[3] != 2);
+        if(!one || (nb[0] > 2 && nb[1] > 2 && nb[2] > 2 && nb[3] > 2))
+			stick ? GetBuilding(x, y)->id = 2 : GetBridge(x, y, z)->id = 2;
         else
             stick ? GetBuilding(x, y)->id = 1 : GetBridge(x, y, z)->id = 1;
     }
