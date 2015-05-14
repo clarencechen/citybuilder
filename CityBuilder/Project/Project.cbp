@@ -37,8 +37,9 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++11" />
 			<Add option="-Wall" />
-			<Add directory="C:/Users/cxl2012.Chaichi-PC/Documents/SFML-2.1/include" />
+			<Add directory="../../../SFML-2.3/include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -46,7 +47,11 @@
 			<Add library="gdi32" />
 			<Add library="winmm" />
 			<Add library="dxguid" />
-			<Add directory="C:/Users/cxl2012.Chaichi-PC/Documents/SFML-2.1/lib" />
+			<Add library="sfml-graphics" />
+			<Add library="sfml-window" />
+			<Add library="sfml-system" />
+			<Add library="sfml-main" />
+			<Add directory="../../../SFML-2.3/lib" />
 		</Linker>
 		<Unit filename="Building.cpp" />
 		<Unit filename="Building.h" />

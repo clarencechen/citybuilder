@@ -1,6 +1,5 @@
 #include "Level.h"
 #include "Engine.h"
-#include "ImageManager.h"
 #include "Tile.h"
 #include <SFML\Graphics.hpp>
 #include <iostream>
@@ -146,7 +145,7 @@ void Level::MatchRoad(int x, int y, int z, bool stick)
     else if(id == 2)
     {
         bool one = (nb[0] != 2 && nb[1] != 2 && nb[2] != 2 && nb[3] != 2);
-        if(!one || (nb[0] > 2 && nb[1] > 2 && nb[2] > 2 && nb[3] > 2))
+        if(!one || (nb[0] > 2 && nb[1] > 2 && nb[2] > 2 && nb[3] > 2) || (nb[0] == 0 && nb[1] == 0 && nb[2] == 0 && nb[3] == 0))
 			stick ? GetBuilding(x, y)->id = 2 : GetBridge(x, y, z)->id = 2;
         else
             stick ? GetBuilding(x, y)->id = 1 : GetBridge(x, y, z)->id = 1;
