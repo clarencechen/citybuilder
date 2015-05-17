@@ -15,6 +15,7 @@ protected:
 	unsigned int baseid;
     unsigned int transform;
     bool preview;
+    bool condemn;
 	sf::Texture texture;
 public:
 	unsigned int id;
@@ -23,10 +24,11 @@ public:
 	Building(int id, int x, int y, int z[4], bool preview);
 	~Building();
 	void Draw(sf::Vector2i camOffset, sf::RenderWindow* rw);
-	void SetStatus(ImageManager& imageManager);
+	void Reset(ImageManager& imageManager);
 	void SetStatus(unsigned int r, bool preview);
 	void SetStatus(sf::Vector2u status, bool preview, ImageManager& imageManager);
 	bool GetDel();
 	bool GetPreview();
+	void Condemn();
 };
 #endif // BUILDING_H

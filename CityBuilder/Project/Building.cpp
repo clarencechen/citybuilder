@@ -10,37 +10,38 @@
 Building::Building(int id, int x, int y, int z, bool preview)
 {
 	this->id = id;
-	idbuffer = id;
+	idbuffer = preview ? 0 : id;
 	this->x = x;
 	this->y = y;
 	for(int i = 0; i < 4; i++)
 		this->z[i] = z;
 	this->preview = preview;
 	this->buffer = sf::Vector2u(0, 0);
+	this->condemn = false;
 }
 
 Building::Building(int id, int x, int y, int z[4], bool preview)
 {
 	this->id = id;
-	idbuffer = id;
+	idbuffer = preview ? 0 : id;
 	this->x = x;
 	this->y = y;
 	for(int i = 0; i < 4; i++)
 		this->z[i] = z[i];
 	this->preview = preview;
 	this->buffer = sf::Vector2u(0, 0);
+	this->condemn = false;
 }
 
 Building::~Building()
 {
 	//dtor
 }
-
 void Building::SetStatus(unsigned int r, bool preview)
 {
 	if(!preview)
 		idbuffer = r;
-	this->id = r;
+	id = r;
 	this->preview = preview;
 }
 
@@ -48,7 +49,6 @@ void Building::SetStatus(sf::Vector2u status, bool preview, ImageManager& imageM
 {
 	if(!preview)
 	{
-		idbuffer = id;
 		buffer.x = status.x;
 		buffer.y = status.y;
 	}
@@ -57,22 +57,27 @@ void Building::SetStatus(sf::Vector2u status, bool preview, ImageManager& imageM
 	texture = sf::Texture(imageManager.GetImage(baseid));
 }
 
-void Building::SetStatus(ImageManager& imageManager)
+void Building::Reset(ImageManager& imageManager)
 {
 	preview = false;
 	id = idbuffer;
 	baseid = buffer.x;
 	transform = buffer.y;
 	texture = sf::Texture(imageManager.GetImage(baseid));
+	condemn = false;
 }
 
 bool Building::GetDel()
 {
-	return ((id == 0 && preview == false) || (buffer.x == 0 && buffer.y == 0));
+	return !idbuffer;
 }
 bool Building::GetPreview()
 {
 	return preview;
+}
+void Building::Condemn()
+{
+	condemn = true;
 }
 
 void Building::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
@@ -124,5 +129,8 @@ void Building::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
 	if(preview)
 		for(int i = 0; i < 4; i++)
 			quad[i].color = sf::Color(255, 255, 255, 128);
+	if(condemn)
+		for(int i = 0; i < 4; i++)
+			quad[i].color = sf::Color(255, 0, 0, 128);
 	rw->draw(quad, &texture);
 }

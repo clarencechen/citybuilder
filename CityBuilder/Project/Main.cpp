@@ -1,5 +1,5 @@
 #include <Windows.h>
-
+#include <iostream>
 #include "Engine.h"
 
 int main()
@@ -10,8 +10,9 @@ int main()
 	{
 		engine->Go();
 	}
-	catch(char* e)
+	catch(std::string e)
 	{
-		MessageBoxA(NULL, e, "Exception Occured", MB_OK | MB_ICONERROR);
+		std::cout << e << std::endl;
 	}
+	delete engine;
 }

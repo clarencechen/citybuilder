@@ -6,38 +6,69 @@
 
 void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview, ImageManager& imageManager)
 {
-    Building* building;
     //catch for out of bounds
     if (x < 0 || y < 0 || x >= w || y >= h)
         return;
-    //catch for occupation by another building
     else
     {
-		if(r <= 16)
-        {
-            if(!stick && GetBridge(x, y, z))
-				GetBridge(x, y, z)->SetStatus(r, preview);
-            else if(!stick && !GetBridge(x, y, z))
-				bridges[x][y][z] = new Building(r, x, y, z, preview);
-            else if(stick && GetBuilding(x, y))
-				if(GetBuilding(x, y)-> id <= 16 || r == 0)
-					GetBuilding(x, y)->SetStatus(r, preview);
-				else
-					return;
-			else if(stick && !GetBuilding(x, y))
-				buildings[x][y] = new Building(r, x, y, GetTile(x, y)->GetHeight(), preview);
-			building = stick ? GetBuilding(x, y) : GetBridge(x, y, z);
-			building->SetStatus(GetBuildingTile(x, y, z, stick), preview, imageManager);
-            //Update road display tiles
-            for (int i = x - 1 ; i <= x + 1 ; i++)
+		Building* building = GetBuilding(x, y);
+		Building* bridge = GetBridge(x, y, z);
+		if(r == 0) //delete tool
+		{
+			if(preview && !stick && bridge)
+				bridge->Condemn();
+			else if (preview && stick && building)
+				building->Condemn();
+			else if(!preview && !stick && bridge)
+			{
+				delete bridge;
+				bridge = 0;
+			}
+            else if(!preview && stick && building)
+			{
+				int id = building->id;
+				delete building;
+					for(int i = 0; i < footprint[id].x; i++)
+						for(int j = 0; j < footprint[id].y; j++)
+							buildings[x + i][y - j] = 0;
+			}
+			for(int i = x - 1; i <= x + 1; i++)
             {
-                for(int j = y - 1 ; j <= y + 1 ; j++)
+                for(int j = y - 1; j <= y + 1; j++)
                 {
                     if(stick ? GetBuilding(i, j) : GetBridge(i, j, z))
                     {
 						MatchRoad(i, j, z, stick);
 						building = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
 						building->SetStatus(GetBuildingTile(i, j, z, stick), preview, imageManager);
+                    }
+                }
+            }
+		}
+		else if(r <= 16)
+        {
+			if(!stick && !bridge)
+				bridges[x][y][z] = new Building(r, x, y, z, preview);
+			else if(stick && !building)
+				buildings[x][y] = new Building(r, x, y, GetTile(x, y)->GetHeight(), preview);
+			else if(!stick && bridge)
+				bridge->SetStatus(r, preview);
+            else if(stick && building)
+				//to make sure roads don't collide into buildings
+				if(building-> id > 16 && r)
+					return;
+				else
+					building->SetStatus(r, preview);
+            //Update display tiles
+            for(int i = x - 1; i <= x + 1; i++)
+            {
+                for(int j = y - 1; j <= y + 1; j++)
+                {
+                    if(stick ? GetBuilding(i, j) : GetBridge(i, j, z))
+                    {
+						MatchRoad(i, j, z, stick);
+						Building* neighbors = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
+						neighbors->SetStatus(GetBuildingTile(i, j, z, stick), preview, imageManager);
                     }
                 }
             }
@@ -50,12 +81,14 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 				{
 					if(x + i < 0 || y - j < 0 || x + i >= w || y - j >= h)
 					{
-						std::cout << "Building footprint out of bounds" << std::endl;
+						if(!preview)
+							std::cout << "Building footprint out of bounds" << std::endl;
 						return;
 					}
 					else if(GetBuilding(x + i, y - j) && !GetBuilding(x + i, y - j)->GetPreview())
 					{
-						std::cout << "Tile occupied" << std::endl;
+						if(!preview)
+							std::cout << "Tile occupied" << std::endl;
 						return;
 					}
 				}
@@ -85,7 +118,7 @@ void Level::Reset(ImageManager& imageManager)
                         bridge = 0;
                     }
                     else
-                        bridge->SetStatus(imageManager);
+                        bridge->Reset(imageManager);
                 }
             }
         }
@@ -105,7 +138,7 @@ void Level::Reset(ImageManager& imageManager)
 							buildings[x + i][y - j] = 0;
 				}
                 else
-                    GetBuilding(x, y)->SetStatus(imageManager);
+                    GetBuilding(x, y)->Reset(imageManager);
 			}
         }
     }

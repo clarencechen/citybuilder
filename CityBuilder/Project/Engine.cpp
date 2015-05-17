@@ -18,7 +18,9 @@ Engine::Engine(int w, int h)
 
 Engine::~Engine()
 {
-
+	delete currentLevel;
+	delete view;
+	delete window;
 }
 
 bool Engine::Init()
@@ -67,12 +69,8 @@ void Engine::RenderFrame()
 		{
 			//Get the tile we're drawing
 			tile = currentLevel->GetTile(tileX, tileY);
-//			column = currentLevel->GetBridge(tileX, tileY);
 			if(tile)
 				tile->Draw(camOffset, window);
-//			for(auto& road : column)
-//				if(road)
-//					road->Draw(camOffset, window);
 		}
 	}
 	for(int y = 0, tileY = (int)(bounds.top); y <= (int)(bounds.height) + 1; y++, tileY++)
@@ -99,6 +97,7 @@ void Engine::ProcessInput()
 	//Loop through all window events
 	while(window->pollEvent(evt))
 	{
+		currentLevel->Reset(imageManager);
 		if(evt.type == sf::Event::Closed)
 			window->close();
         if(evt.type == sf::Event::KeyPressed)
@@ -130,10 +129,8 @@ void Engine::ProcessInput()
 				}
 			}
 		}
-		else if(evt.type == sf::Event::MouseMoved)
+		if(evt.type == sf::Event::MouseMoved)
 		{
-			currentLevel->Reset(imageManager);
-
 			sf::Vector2i coords(FindTile(sf::Vector2f(evt.mouseMove.x, evt.mouseMove.y)));
 			sf::Vector2i point(FindPoint(sf::Vector2f(evt.mouseMove.x, evt.mouseMove.y)));
 			if(mouseDown)
@@ -261,7 +258,7 @@ void Engine::ProcessInput()
 				currentLevel->Place(coords.x, coords.y, currentZ, stick, mode, true, imageManager);
 			}
 		}
-		else if(evt.type == sf::Event::MouseButtonReleased)
+		if(evt.type == sf::Event::MouseButtonReleased)
 		{
 			sf::Vector2i point(FindPoint(sf::Vector2f(evt.mouseMove.x, evt.mouseMove.y)));
 			sf::Vector2i coords(FindTile(sf::Vector2f(evt.mouseButton.x, evt.mouseButton.y)));

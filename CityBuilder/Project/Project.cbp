@@ -12,6 +12,7 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-std=c++11" />
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
@@ -27,6 +28,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-std=c++11" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -38,8 +40,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-std=c++11" />
-			<Add option="-Wall" />
-			<Add directory="../../../SFML-2.3/include" />
+			<Add directory="../../../../SFML-2.3/include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -47,11 +48,7 @@
 			<Add library="gdi32" />
 			<Add library="winmm" />
 			<Add library="dxguid" />
-			<Add library="sfml-graphics" />
-			<Add library="sfml-window" />
-			<Add library="sfml-system" />
-			<Add library="sfml-main" />
-			<Add directory="../../../SFML-2.3/lib" />
+			<Add directory="../../../../SFML-2.3/lib" />
 		</Linker>
 		<Unit filename="Building.cpp" />
 		<Unit filename="Building.h" />
