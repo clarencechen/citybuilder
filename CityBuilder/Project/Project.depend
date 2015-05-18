@@ -540,7 +540,7 @@
 	<SFML\Graphics.hpp>
 	<iostream>
 
-1431540521 source:h:\citybuilder\citybuilder\project\building.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\building.cpp
 	<SFML\Graphics.hpp>
 	<math.h>
 	<iostream>
@@ -550,30 +550,30 @@
 	"Infrastructure.h"
 	"Tile.h"
 
-1431540521 h:\citybuilder\citybuilder\project\level.h
+1431975194 h:\citybuilder\citybuilder\project\level.h
 	<string>
 	<vector>
 	"Tile.h"
 	"ImageManager.h"
 	"Building.h"
 
-1431540521 h:\citybuilder\citybuilder\project\tile.h
+1431975194 h:\citybuilder\citybuilder\project\tile.h
 	<SFML\Graphics.hpp>
 	"ImageManager.h"
 
-1431540521 h:\citybuilder\citybuilder\project\imagemanager.h
+1431975194 h:\citybuilder\citybuilder\project\imagemanager.h
 	<vector>
 	<map>
 	<string>
 	<SFML\Graphics.hpp>
 
-1431540521 h:\citybuilder\citybuilder\project\building.h
+1431975194 h:\citybuilder\citybuilder\project\building.h
 	<SFML\Graphics.hpp>
 	"ImageManager.h"
 
-1431540521 h:\citybuilder\citybuilder\project\infrastructure.h
+1431975194 h:\citybuilder\citybuilder\project\infrastructure.h
 
-1431540521 source:h:\citybuilder\citybuilder\project\engine.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\engine.cpp
 	"Engine.h"
 	"Level.h"
 	"Infrastructure.h"
@@ -583,14 +583,14 @@
 	<SFML\Graphics.hpp>
 	<iostream>
 
-1431540521 h:\citybuilder\citybuilder\project\engine.h
+1431975194 h:\citybuilder\citybuilder\project\engine.h
 	<SFML\Graphics.hpp>
 	"Tile.h"
 	"ImageManager.h"
 	"Infrastructure.h"
 	"Level.h"
 
-1431540521 source:h:\citybuilder\citybuilder\project\imagemanager.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\imagemanager.cpp
 	"ImageManager.h"
 	<vector>
 	<string>
@@ -598,20 +598,20 @@
 	<SFML\Graphics.hpp>
 	"rapidxml.hpp"
 
-1431540528 h:\citybuilder\citybuilder\project\rapidxml.hpp
+1431975202 h:\citybuilder\citybuilder\project\rapidxml.hpp
 	<cstdlib>
 	<cassert>
 	<new>
 	<exception>
 
-1431627707 source:h:\citybuilder\citybuilder\project\infrastructure.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\infrastructure.cpp
 	"Level.h"
 	"Engine.h"
 	"Tile.h"
 	<SFML\Graphics.hpp>
 	<iostream>
 
-1431540521 source:h:\citybuilder\citybuilder\project\level.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\level.cpp
 	<vector>
 	<string>
 	<fstream>
@@ -621,11 +621,12 @@
 	"Tile.h"
 	"rapidxml.hpp"
 
-1431540521 source:h:\citybuilder\citybuilder\project\main.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\main.cpp
 	<Windows.h>
+	<iostream>
 	"Engine.h"
 
-1431540521 source:h:\citybuilder\citybuilder\project\tile.cpp
+1431975194 source:h:\citybuilder\citybuilder\project\tile.cpp
 	"ImageManager.h"
 	"Infrastructure.h"
 	"Tile.h"
