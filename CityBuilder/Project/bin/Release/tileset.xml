@@ -37,12 +37,20 @@
 		<tile x="3" y="5" frames="1" size="1" id="44"/>
 		<tile x="3" y="6" frames="1" size="1" id="45"/>
 		
-		<tile x="4" y="0" frames="1" size="1" id="50"/>
-		<tile x="4" y="1" frames="1" size="1" id="51"/>
-		<tile x="4" y="2" frames="1" size="1" id="52"/>
+		<tile x="4" y="1" frames="1" size="1" id="50"/>
+		<tile x="4" y="2" frames="1" size="1" id="51"/>
+		<tile x="4" y="3" frames="1" size="1" id="52"/>
 
-		<tile x="5" y="1" frames="1" size="1" id="53"/>
-		<tile x="5" y="2" frames="1" size="1" id="54"/>
+		<tile x="4" y="4" frames="1" size="1" id="53"/>
+		<tile x="4" y="5" frames="1" size="1" id="54"/>	
+		<tile x="4" y="6" frames="1" size="1" id="55"/>
+
+		<tile x="5" y="1" frames="1" size="1" id="60"/>
+		<tile x="5" y="2" frames="1" size="1" id="61"/>
+
+		<tile x="5" y="3" frames="1" size="1" id="57"/>
+		<tile x="5" y="4" frames="1" size="1" id="58"/>
+		<tile x="5" y="5" frames="1" size="1" id="59"/>
 	</imagefile>
 	<imagefile path="buildings.png">
 		<tile x="0" y="0" frames="1" size="3" id="128"/>
