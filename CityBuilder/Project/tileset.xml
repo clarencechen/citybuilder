@@ -1,0 +1,64 @@
+<tileset>
+	<imagefile path="tileset.png">
+		<tile x="0" y="0" frames="1" size="1" id="0"/>
+		<tile x="1" y="0" frames="1" size="1" id="1"/>
+
+		<tile x="0" y="1" frames="1" size="1" id="10"/>
+		<tile x="0" y="2" frames="1" size="1" id="11"/>
+		<tile x="0" y="3" frames="1" size="1" id="12"/>
+		
+		<tile x="1" y="1" frames="1" size="1" id="20"/>
+		<tile x="1" y="2" frames="1" size="1" id="21"/>
+		<tile x="1" y="3" frames="1" size="1" id="22"/>
+
+		<tile x="1" y="4" frames="1" size="1" id="23"/>
+		<tile x="1" y="5" frames="1" size="1" id="24"/>
+
+		<tile x="1" y="6" frames="1" size="1" id="25"/>
+		<tile x="1" y="7" frames="1" size="1" id="26"/>
+
+		<tile x="2" y="1" frames="1" size="1" id="30"/>
+		<tile x="2" y="2" frames="1" size="1" id="31"/>
+
+		<tile x="2" y="3" frames="1" size="1" id="32"/>
+		<tile x="2" y="4" frames="1" size="1" id="33"/>
+
+		<tile x="2" y="5" frames="1" size="1" id="34"/>
+		<tile x="2" y="6" frames="1" size="1" id="35"/>
+		<tile x="2" y="7" frames="1" size="1" id="36"/>
+		<tile x="2" y="8" frames="1" size="1" id="37"/>
+
+		<tile x="3" y="1" frames="1" size="1" id="40"/>
+		<tile x="3" y="2" frames="1" size="1" id="41"/>
+
+		<tile x="3" y="3" frames="1" size="1" id="42"/>
+		<tile x="3" y="4" frames="1" size="1" id="43"/>
+
+		<tile x="3" y="5" frames="1" size="1" id="44"/>
+		<tile x="3" y="6" frames="1" size="1" id="45"/>
+		
+		<tile x="4" y="1" frames="1" size="1" id="50"/>
+		<tile x="4" y="2" frames="1" size="1" id="51"/>
+		<tile x="4" y="3" frames="1" size="1" id="52"/>
+
+		<tile x="4" y="4" frames="1" size="1" id="53"/>
+		<tile x="4" y="5" frames="1" size="1" id="54"/>	
+		<tile x="4" y="6" frames="1" size="1" id="55"/>
+
+		<tile x="5" y="1" frames="1" size="1" id="60"/>
+		<tile x="5" y="2" frames="1" size="1" id="61"/>
+
+		<tile x="5" y="3" frames="1" size="1" id="57"/>
+		<tile x="5" y="4" frames="1" size="1" id="58"/>
+		<tile x="5" y="5" frames="1" size="1" id="59"/>
+	</imagefile>
+	<imagefile path="buildings.png">
+		<tile x="0" y="0" frames="1" size="3" id="128"/>
+		<tile x="3" y="0" frames="1" size="3" id="129"/>
+		<tile x="6" y="0" frames="1" size="3" id="130"/>
+
+		<tile x="0" y="3" frames="1" size="3" id="131"/>
+		<tile x="3" y="3" frames="1" size="3" id="132"/>
+		<tile x="6" y="3" frames="1" size="3" id="133"/>
+	</imagefile>
+</tileset>

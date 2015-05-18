@@ -1,0 +1,4 @@
+<level width="64" height="64">
+	<tileset path="tileset.xml"/>
+
+</level>
