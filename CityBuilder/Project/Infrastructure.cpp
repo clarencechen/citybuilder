@@ -26,7 +26,7 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 			}
             else if(!preview && stick && building)
 			{
-				int id = building->id;
+				int id = GetId(x, y, z, stick);
 				delete building;
 					for(int i = 0; i < footprint[id].x; i++)
 						for(int j = 0; j < footprint[id].y; j++)
@@ -45,7 +45,7 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
                 }
             }
 		}
-		else if(r <= 16)
+		else if(r <= 2)
         {
 			if(!stick && !bridge)
 				bridges[x][y][z] = new Building(r, x, y, z, preview);
@@ -97,7 +97,7 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 			for(int i = 0; i < footprint[r].x; i++)
 				for(int j = 0; j < footprint[r].y; j++)
 					buildings[x + i][y - j] = buildings[x][y];
-			GetBuilding(x, y)->SetStatus(GetBuildingTile(x, y, z, stick), preview, imageManager);
+			buildings[x][y]->SetStatus(GetBuildingTile(x, y, z, stick), preview, imageManager);
         }
     }
 }
@@ -131,7 +131,7 @@ void Level::Reset(ImageManager& imageManager)
 			{
 				if(GetBuilding(x, y)->GetDel())
                 {
-                    int r = GetBuilding(x, y)->id;
+                    int r = GetId(x, y, 0, true);
                     delete buildings[x][y];
 					for(int i = 0; i < footprint[r].x; i++)
 						for(int j = 0; j < footprint[r].y; j++)
@@ -183,6 +183,14 @@ void Level::MatchRoad(int x, int y, int z, bool stick)
         else
             stick ? GetBuilding(x, y)->id = 1 : GetBridge(x, y, z)->id = 1;
     }
+    else if(id == 3)
+	{
+
+	}
+	else if(id == 4)
+	{
+
+	}
 }
 
 Building* Level::GetBridge(unsigned int x, unsigned int y, int z)
@@ -205,13 +213,9 @@ std::vector<Building*> Level::GetBridge(unsigned int x, unsigned int y)
     if(x < bridges.size())
     {
         if(y < bridges[x].size())
-        {
             return bridges[x][y];
-        }
         else
-        {
             return std::vector<Building*>();
-        }
     }
     else
         return std::vector<Building*>();

@@ -351,6 +351,11 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 		{
 			mode = 2;
 		}
+		//rail
+//		else if(code == sf::Keyboard::T)
+//		{
+//			mode = 3;
+//		}
 		//museum
 		else if(code == sf::Keyboard::M)
 		{
