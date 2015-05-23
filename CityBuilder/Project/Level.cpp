@@ -5,7 +5,7 @@
 #include "Level.h"
 #include "Infrastructure.h"
 #include "ImageManager.h"
-#include "Tile.h"
+#include "TerrainTile.h"
 
 
 #include "rapidxml.hpp"
@@ -35,7 +35,7 @@ void Level::SetDimensions(int w, int h)
 {
 	map = std::vector<std::vector<TerrainTile*> >(w, std::vector<TerrainTile*>(h));
 	buildings = std::vector<std::vector<Building*> >(w, std::vector<Building*>(h));
-	bridges = std::vector<std::vector<std::vector<Building*> > >(w, std::vector<std::vector<Building*> >(h, std::vector<Building*>(8)));
+	bridges = std::vector<std::vector<std::vector<Draggable*> > >(w, std::vector<std::vector<Draggable*> >(h, std::vector<Draggable*>(8)));
 }
 
 void Level::AddTile(int x, int y, TerrainTile* tile)

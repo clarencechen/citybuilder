@@ -1,5 +1,5 @@
-#ifndef _TERRAINTILE_H
-#define _TERRAINTILE_H
+#ifndef _TILE_H
+#define _TILE_H
 
 #include <SFML\Graphics.hpp>
 #include "ImageManager.h"

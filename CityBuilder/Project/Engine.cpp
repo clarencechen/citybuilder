@@ -1,7 +1,7 @@
 #include "Engine.h"
 #include "Level.h"
 #include "Infrastructure.h"
-#include "Tile.h"
+#include "TerrainTile.h"
 #include "Building.h"
 #include <math.h>
 #include <SFML\Graphics.hpp>
@@ -47,7 +47,7 @@ void Engine::RenderFrame()
 	TerrainTile* tile;
 	Building* building;
 	Building* last = 0; //Makes sure we do not draw multiple identical buildings
-	std::vector<Building*> column;
+	std::vector<Draggable*> column;
 	window->clear();
 	//Get the tile bounds we need to draw
 	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
@@ -82,9 +82,9 @@ void Engine::RenderFrame()
 			column = currentLevel->GetBridge(tileX, tileY);
 			if(building && building != last)
 				building->Draw(camOffset, window);
-			for(auto& road : column)
-				if(road)
-					road->Draw(camOffset, window);
+			for(auto& network : column)
+				if(network)
+					network->Draw(camOffset, window);
 			last = building;
 		}
 	}
@@ -112,11 +112,11 @@ void Engine::ProcessInput()
 				if(mode == 128)
 				{
 					if(currentLevel->GetBuilding(coords.x, coords.y))
-						std::cout << "This Tile: " << currentLevel->GetId(coords.x, coords.y, 0, true) << "  " << currentLevel->GetBuildingTile(coords.x, coords.y, currentZ, true).x << std::endl;
+						std::cout << "This Tile: " << currentLevel->GetBuilding(coords.x, coords.y)->GetRoad() << " " << currentLevel->GetBuilding(coords.x, coords.y)->GetRail() << " " << currentLevel->GetBuilding(coords.x, coords.y)->GetDisplayTile(currentLevel).x << " " << currentLevel->GetBuilding(coords.x, coords.y)->GetDisplayTile(currentLevel).y << std::endl;
 					else
 						std::cout << "This Tile is vacant." << std::endl;
 				}
-				else if(mode <= 16)
+				if(mode <= 16)
 				{
 					start = sf::Vector2i(coords.x, coords.y);
 					selection = sf::IntRect(coords.x, coords.y, 0, 0);
@@ -184,15 +184,11 @@ void Engine::ProcessInput()
 							selection = sf::IntRect(start.x, coords.y, 0, -dy);
 					}
 					for(int y = 0, tileY = selection.top; y <= selection.height; y++, tileY++)
-					{
 						for(int x = 0, tileX = selection.left; x <= selection.width; x++, tileX++)
 							currentLevel->Place(tileX, tileY, currentZ, stick, mode, true, imageManager);
-					}
 				}
 				else if(mode < 128)
-				{
 					currentLevel->Place(coords.x, coords.y, currentZ, stick, mode, true, imageManager);
-				}
  				//terraforming (129 and 130 kept separate in case different coloring is needed)
 				else if(mode == 129)
 				{
@@ -204,7 +200,6 @@ void Engine::ProcessInput()
 							selection = sf::IntRect(point.x, point.y, -dx, -dy);
 						else
 							selection = sf::IntRect(start.x, point.y, dx, -dy);
-
 					}
 					else
 					{
@@ -214,10 +209,8 @@ void Engine::ProcessInput()
 							selection = sf::IntRect(start.x, start.y, dx,  dy);
 					}
 					for(int y = 0, pointY = selection.top; y <= selection.height; y++, pointY++)
-					{
 						for(int x = 0, pointX = selection.left; x <= selection.width; x++, pointX++)
 							currentLevel->Terraform(pointX, pointY, 0);
-					}
 				}
 				else if (mode == 130)
 				{
@@ -245,18 +238,14 @@ void Engine::ProcessInput()
 				}
 			}
 			else if(mode > 0 && mode <= 16)
-			{
 				currentLevel->Place(coords.x, coords.y, currentZ, stick, mode, true, imageManager);
-			}
 			else if(mode == 129 || mode == 130)
 			{
 				sf::Vector2i point(FindPoint(sf::Vector2f(evt.mouseMove.x, evt.mouseMove.y)));
 				currentLevel->Terraform(point.x, point.y, 0);
 			}
 			else
-			{
 				currentLevel->Place(coords.x, coords.y, currentZ, stick, mode, true, imageManager);
-			}
 		}
 		if(evt.type == sf::Event::MouseButtonReleased)
 		{
@@ -326,86 +315,52 @@ void Engine::FindCoord(sf::Vector2f& mouse)
 void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 {
         if(code == sf::Keyboard::Left)
-        {
             delta = sf::Vector2f(-view->getSize().x, 0) / 25.0f;
-        }
         else if(code == sf::Keyboard::Right)
-        {
             delta = sf::Vector2f(view->getSize().x, 0) / 25.0f;
-        }
         else if(code == sf::Keyboard::Up)
-        {
             delta = sf::Vector2f(0, -view->getSize().y) / 25.0f;
-        }
         else if(code == sf::Keyboard::Down)
-        {
             delta = sf::Vector2f(0, view->getSize().y) / 25.0f;
-        }
         //small road
         else if(code == sf::Keyboard::R)
-        {
             mode = 1;
-        }
         //large road
         else if(code == sf::Keyboard::Num4)
-		{
 			mode = 2;
-		}
 		//rail
-//		else if(code == sf::Keyboard::T)
-//		{
-//			mode = 3;
-//		}
+		else if(code == sf::Keyboard::T)
+			mode = 3;
 		//museum
 		else if(code == sf::Keyboard::M)
-		{
 			mode = 32;
-		}
 		//elementary school
 		else if(code == sf::Keyboard::K)
-		{
 			mode = 33;
-		}
 		//police station
 		else if(code == sf::Keyboard::P)
-		{
 			mode = 34;
-		}
 		//fire station
 		else if(code == sf::Keyboard::F)
-		{
 			mode = 35;
-		}
 		//hospital
 		else if(code == sf::Keyboard::H)
-		{
 			mode = 36;
-		}
 		//library
 		else if(code == sf::Keyboard::L)
-		{
 			mode = 37;
-		}
         //demolish
         else if(code == sf::Keyboard::Escape)
-        {
             mode = 128;
-        }
         //query
         else if(code == sf::Keyboard::Tilde)
-		{
 			mode = 0;
-		}
 		//lower terrain
 		else if(code == sf::Keyboard::Comma)
-		{
 			mode = 129;
-		}
 		//raise terrain
 		else if(code == sf::Keyboard::Period)
-		{
 			mode = 130;
-		}
 		else if(code == sf::Keyboard::PageUp)
 		{
 			currentZ++;
@@ -417,9 +372,7 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 			std::cout << "Current Z: " << currentZ << std::endl;
 		}
 		else if(code == sf::Keyboard::BackSlash)
-		{
 			stick = !stick;
-		}
 }
 
 void Engine::Update(float speed)

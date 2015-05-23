@@ -1,11 +1,13 @@
-#ifndef _LEVEL_H
-#define _LEVEL_H
+#ifndef LEVEL_H
+#define LEVEL_H
 
 #include <string>
 #include <vector>
-#include "Tile.h"
+#include "TerrainTile.h"
 #include "ImageManager.h"
 #include "Building.h"
+#include "Transport.h"
+#include "Structure.h"
 
 class Level
 {
@@ -13,7 +15,7 @@ private:
 	//A 2D array of Tile pointers
 	std::vector<std::vector<TerrainTile*> > map;
 	//A 3D array of Building Pointers
-	std::vector<std::vector<std::vector<Building*> > > bridges;
+	std::vector<std::vector<std::vector<Draggable*> > > bridges;
 	std::vector<std::vector<Building*> > buildings;
 	//Width and height of level (in tiles)
 	int w;
@@ -34,19 +36,14 @@ public:
 	void Place(int x, int y, int z, bool stick, unsigned int r, bool preview, ImageManager& ImageManager);
 	void Place(int x, int y, int z, unsigned int r, bool preview, ImageManager& imageManager);
 
-	void MatchRoad(int x, int y, int z, bool stick);
-	int(&GetNeighbors(unsigned int x, unsigned int y, int z, bool stick))[4];
-	sf::Vector2u GetBuildingTile(unsigned int x, unsigned int y, int z, bool stick);
+	Building*(&GetNeighbors(unsigned int x, unsigned int y, int z, bool stick))[4];
 
 	void Terraform(int x, int y, int raise);
 	int GetHeightForMouse(int x, int y);
 	void GradeBuilding(sf::IntRect bounds);
 
-	void AddBuilding(unsigned int r, int x, int y, int z, bool preview);
-	void AddRoad(unsigned int r, int x, int y, int z, bool preview);
-
-	std::vector<Building*> GetBridge(unsigned int x, unsigned int y);
-	Building* GetBridge(unsigned int x, unsigned int y, int z);
+	std::vector<Draggable*> GetBridge(unsigned int x, unsigned int y);
+	Draggable* GetBridge(unsigned int x, unsigned int y, int z);
 	unsigned int GetId(unsigned int x, unsigned int y, int z, bool stick);
 	Building* GetBuilding(unsigned int x, unsigned int y);
 

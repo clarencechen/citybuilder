@@ -1,6 +1,6 @@
 #include "ImageManager.h"
 #include "Infrastructure.h"
-#include "Tile.h"
+#include "TerrainTile.h"
 #include <SFML\Graphics.hpp>
 #include <math.h>
 #include <iostream>

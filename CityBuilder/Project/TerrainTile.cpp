@@ -1,74 +1,30 @@
+#include "ImageManager.h"
+#include "Infrastructure.h"
+#include "Tile.h"
 #include <SFML\Graphics.hpp>
 #include <math.h>
 #include <iostream>
-#include "Level.h"
-#include "Building.h"
-#include "ImageManager.h"
-#include "Infrastructure.h"
-#include "TerrainTile.h"
 
-Building::Building(int x, int y, int z, bool preview)
+TerrainTile::TerrainTile(int baseid, int x, int y, int transform, ImageManager& imageManager)
 {
 	this->x = x;
 	this->y = y;
 	for(int i = 0; i < 4; i++)
-		this->z[i] = z;
-	this->preview = preview;
-	this->buffer = sf::Vector2u(0, 0);
-	this->condemn = false;
-}
-
-Building::Building(int x, int y, int z[4], bool preview)
-{
-	this->x = x;
-	this->y = y;
-	for(int i = 0; i < 4; i++)
-		this->z[i] = z[i];
-	this->preview = preview;
-	this->buffer = sf::Vector2u(0, 0);
-	this->condemn = false;
-}
-
-Building::~Building()
-{
-	//dtor
-}
-
-void Building::SetStatus(sf::Vector2u status, bool preview, ImageManager& imageManager)
-{
-	if(!preview)
 	{
-		buffer.x = status.x;
-		buffer.y = status.y;
+		this->preview[i] = false;
+		this->z[i] = 0;
 	}
-	baseid = status.x;
-	transform = status.y;
+	this->baseid = 0;
+	this->transform = 0;
 	texture = sf::Texture(imageManager.GetImage(baseid));
 }
 
-void Building::Reset(ImageManager& imageManager)
+TerrainTile::~TerrainTile()
 {
-	preview = false;
-	baseid = buffer.x;
-	transform = buffer.y;
-	texture = sf::Texture(imageManager.GetImage(baseid));
-	condemn = false;
+
 }
 
-bool Building::GetPreview()
-{
-	return preview;
-}
-bool Building::GetDel()
-{
-	return buffer == sf::Vector2u(0, 0);
-}
-void Building::Condemn()
-{
-	condemn = true;
-}
-
-void Building::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
+void TerrainTile::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
 {
 	sf::VertexArray quad(sf::Quads, 4);
 	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x,
@@ -114,11 +70,35 @@ void Building::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
 			break;
 		}
 	};
-	if(preview)
-		for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)
+		if(preview[i])
 			quad[i].color = sf::Color(255, 255, 255, 128);
-	if(condemn)
-		for(int i = 0; i < 4; i++)
-			quad[i].color = sf::Color(255, 0, 0, 128);
 	rw->draw(quad, &texture);
+}
+
+int(&TerrainTile::GetHeight())[4]
+{
+	return z;
+}
+
+void TerrainTile::Raise(int elevation, int corner)
+{
+	if(elevation != 0)
+		{
+			preview[corner] = false;
+			z[corner] += elevation;
+		}
+	else
+		preview[corner] = true;
+}
+
+void TerrainTile::SetHeight(int elevation, int corner)
+{
+	z[corner] = elevation;
+}
+
+void TerrainTile::Reset()
+{
+	for(int i = 0; i < 4; i++)
+		preview[i] = false;
 }

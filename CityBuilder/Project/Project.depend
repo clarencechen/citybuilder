@@ -446,7 +446,7 @@
 
 1418344951 c:\users\cxl2012.chaichi-pc\documents\citybuilder\project\sizes.h
 
-1431802430 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\building.cpp
+1432254741 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\building.cpp
 	<SFML\Graphics.hpp>
 	<math.h>
 	<iostream>
@@ -454,16 +454,18 @@
 	"Building.h"
 	"ImageManager.h"
 	"Infrastructure.h"
-	"Tile.h"
+	"TerrainTile.h"
 
-1432004930 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\level.h
+1432351269 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\level.h
 	<string>
 	<vector>
-	"Tile.h"
+	"TerrainTile.h"
 	"ImageManager.h"
 	"Building.h"
+	"Transport.h"
+	"Structure.h"
 
-1431648435 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\tile.h
+1432088110 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\tile.h
 	<SFML\Graphics.hpp>
 	"ImageManager.h"
 
@@ -473,25 +475,26 @@
 	<string>
 	<SFML\Graphics.hpp>
 
-1431802402 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\building.h
+1432357154 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\building.h
 	<SFML\Graphics.hpp>
+	"Level.h"
 	"ImageManager.h"
 
 1431648435 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\infrastructure.h
 
-1431820816 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\engine.cpp
+1432359208 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\engine.cpp
 	"Engine.h"
 	"Level.h"
 	"Infrastructure.h"
-	"Tile.h"
+	"TerrainTile.h"
 	"Building.h"
 	<math.h>
 	<SFML\Graphics.hpp>
 	<iostream>
 
-1431648435 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\engine.h
+1432174346 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\engine.h
 	<SFML\Graphics.hpp>
-	"Tile.h"
+	"TerrainTile.h"
 	"ImageManager.h"
 	"Infrastructure.h"
 	"Level.h"
@@ -510,14 +513,14 @@
 	<new>
 	<exception>
 
-1431648435 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\level.cpp
+1432330196 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\level.cpp
 	<vector>
 	<string>
 	<fstream>
 	"Level.h"
 	"Infrastructure.h"
 	"ImageManager.h"
-	"Tile.h"
+	"TerrainTile.h"
 	"rapidxml.hpp"
 
 1431754863 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\main.cpp
@@ -525,18 +528,19 @@
 	<iostream>
 	"Engine.h"
 
-1431648435 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\tile.cpp
+1432174349 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\tile.cpp
 	"ImageManager.h"
 	"Infrastructure.h"
-	"Tile.h"
+	"TerrainTile.h"
 	<SFML\Graphics.hpp>
 	<math.h>
 	<iostream>
 
-1432004474 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\infrastructure.cpp
+1432358930 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\infrastructure.cpp
 	"Level.h"
 	"Engine.h"
-	"Tile.h"
+	"Transport.h"
+	"TerrainTile.h"
 	<SFML\Graphics.hpp>
 	<iostream>
 
@@ -1742,4 +1746,38 @@
 	<SFML/System/String.hpp>
 	<string>
 	<vector>
+
+1432088110 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\terraintile.h
+	<SFML\Graphics.hpp>
+	"ImageManager.h"
+
+1432354923 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\transport.h
+	<SFML\Graphics.hpp>
+	"Level.h"
+	"Building.h"
+	"ImageManager.h"
+
+1432354299 c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\structure.h
+	<SFML\Graphics.hpp>
+	"ImageManager.h"
+
+1432354233 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\structure.cpp
+	<SFML\Graphics.hpp>
+	<math.h>
+	"Level.h"
+	"Building.h"
+	"ImageManager.h"
+	"Infrastructure.h"
+	"TerrainTile.h"
+	"Structure.h"
+
+1432359281 source:c:\users\cxl2012.chaichi-pc\documents\github\citybuilder\citybuilder\project\transport.cpp
+	<SFML\Graphics.hpp>
+	<math.h>
+	"Level.h"
+	"Building.h"
+	"ImageManager.h"
+	"Infrastructure.h"
+	"TerrainTile.h"
+	"Transport.h"
 

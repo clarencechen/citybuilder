@@ -3,7 +3,7 @@
 
 #include <SFML\Graphics.hpp>
 
-#include "Tile.h"
+#include "TerrainTile.h"
 #include "ImageManager.h"
 #include "Infrastructure.h"
 #include "Level.h"
