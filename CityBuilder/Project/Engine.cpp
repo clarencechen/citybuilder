@@ -89,10 +89,10 @@ void Engine::RenderFrame()
 			building = currentLevel->GetBuilding(tileX, tileY);
 			column = currentLevel->GetBridge(tileX, tileY);
 			//check if building exists has not already been drawn
-			if(building && !(alreadyDone.count(building->GetAnchor().x*currentLevel->GetWidth() +building->GetAnchor().y)))
+			if(building && !(alreadyDone.count(building->GetAnchor().x*currentLevel->GetHeight() +building->GetAnchor().y)))
             {
                 building->Draw(camOffset, window, imageManager);
-                alreadyDone.insert(building->GetAnchor().x*currentLevel->GetWidth() +building->GetAnchor().y);
+                alreadyDone.insert(building->GetAnchor().x*currentLevel->GetHeight() +building->GetAnchor().y);
             }
 			for(auto& network : column)
 				if(network)
