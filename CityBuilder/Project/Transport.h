@@ -2,14 +2,13 @@
 #define TRANSPORT_H
 
 #include <SFML\Graphics.hpp>
-#include "Level.h"
 #include "Building.h"
-#include "ImageManager.h"
+
 class Level;
 class Draggable : public Building
 {
+friend class City;
 protected:
-	bool stick;
 	unsigned int roadState;
 	unsigned int roadBuffer;
 	unsigned int railState;
@@ -22,7 +21,7 @@ public:
 	void MatchNetwork(bool preview, Level* level);
 	sf::Vector2u GetDisplayTile(Level* level);
 	sf::Vector2u GetFootprint();
-	void Reset(ImageManager& imageManager);
+	void Reset();
 	unsigned int GetRoad();
 	unsigned int GetRail();
 	void SetRoad(unsigned int r, bool preview);

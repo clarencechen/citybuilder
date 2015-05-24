@@ -1,11 +1,11 @@
 #include "Level.h"
 #include "Engine.h"
-#include "Transport.h"
-#include "TerrainTile.h"
+#include "Building.h"
+
 #include <SFML\Graphics.hpp>
 #include <iostream>
 
-void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview, ImageManager& imageManager)
+void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
 {
     //catch for out of bounds
     if (x < 0 || y < 0 || x >= w || y >= h)
@@ -13,10 +13,14 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
     else
     {
 		Building* b = stick ? GetBuilding(x, y) : GetBridge(x, y, z);
-		if(r == 0 && b) //delete tool
+		if(r == 64 && b) //delete tool
 		{
+			sf::Vector2u anchor = b->GetAnchor();
 			if(preview)
-				b->Condemn();
+            {
+ 				b->Condemn();
+                return;
+            }
 			else if(!stick)
 			{
 				delete b;
@@ -28,23 +32,23 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 				delete b;
 				for(int i = 0; i < footprint.x; i++)
 					for(int j = 0; j < footprint.y; j++)
-						buildings[x + i][y - j] = 0;
+						buildings[anchor.x + i][anchor.y - j] = 0;
 			}
 			//Update display tiles
-			for(int i = x - 1; i <= x + 1; i++)
+			for(int i = anchor.x - 1; i <= anchor.x + 1; i++)
 			{
-				for(int j = y - 1; j <= y + 1; j++)
+				for(int j = anchor.y - 1; j <= anchor.y + 1; j++)
 				{
 					Building* n = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
 					if(n)
 					{
 						n->MatchNetwork(preview, this);
-						n->SetStatus(n->GetDisplayTile(this), preview, imageManager);
+						n->SetStatus(n->GetDisplayTile(this), preview);
 					}
 				}
 			}
 		}
-		else if(r > 0 && r <= 16)
+		else if(r < 16)
         {
 			Building* d = stick ? GetBuilding(x, y) : GetBridge(x, y, z);
 			if(!d)
@@ -65,12 +69,12 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 					if(n)
 					{
 						n->MatchNetwork(preview, this);
-						n->SetStatus(n->GetDisplayTile(this), preview, imageManager);
+						n->SetStatus(n->GetDisplayTile(this), preview);
 					}
 				}
 			}
         }
-        else if(r > 16 && r < 128)
+        else if(r >= 16 && r < 64)
         {
 			for(int i = 0; i < footprint[r].x; i++)
 			{
@@ -90,16 +94,24 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview,
 					}
 				}
 			}
-			buildings[x][y] = new Structure(r, x, y, z, preview);
-			for(int i = 0; i < footprint[r].x; i++)
-				for(int j = 0; j < footprint[r].y; j++)
-					buildings[x + i][y - j] = buildings[x][y];
-			buildings[x][y]->SetStatus(buildings[x][y]->GetDisplayTile(this), preview, imageManager);
+            r < 32 ?    buildings[x][y] = new Zone(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y)), preview) :
+                        buildings[x][y] = new Structure(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y)), preview);
+            for(int i = 0; i < footprint[r].x; i++)
+                for(int j = 0; j < footprint[r].y; j++)
+                    buildings[x + i][y - j] = buildings[x][y];
+        buildings[x][y]->SetStatus(buildings[x][y]->GetDisplayTile(this), preview);
+        }
+        else if(r == 65 || r == 66)
+        {
+            if(preview)
+                Terraform(x, y, 0);
+            else
+                Terraform(x, y, r == 65 ? 1 : -1);
         }
     }
 }
 
-void Level::Reset(ImageManager& imageManager)
+void Level::Reset()
 {
     for(auto& vector : bridges)
     {
@@ -115,7 +127,7 @@ void Level::Reset(ImageManager& imageManager)
                         bridge = 0;
                     }
                     else
-                        bridge->Reset(imageManager);
+                        bridge->Reset();
                 }
             }
         }
@@ -125,19 +137,16 @@ void Level::Reset(ImageManager& imageManager)
         for(int y = h - 1; y >= 0; --y)
         {
             Building* b = GetBuilding(x, y);
-            if(b)
+            if(b && b->GetDel())
 			{
-				if(b->GetDel())
-                {
-                    sf::Vector2u footprint = b->GetFootprint();
-                    delete buildings[x][y];
-					for(int i = 0; i < footprint.x; i++)
-						for(int j = 0; j < footprint.y; j++)
-							buildings[x + i][y - j] = 0;
-				}
-                else
-                    b->Reset(imageManager);
-			}
+                sf::Vector2u footprint = b->GetFootprint();
+                delete buildings[x][y];
+                for(int i = 0; i < footprint.x; i++)
+                    for(int j = 0; j < footprint.y; j++)
+                        buildings[x + i][y - j] = 0;
+            }
+            else if(b)
+                b->Reset();
         }
     }
     for(auto& vector : map)
@@ -200,39 +209,36 @@ void Level::Terraform(int x, int y, int raise)
 		GetTile(x - 1, y)->Raise(raise, 2);
     }
 }
-
+unsigned int Level::GetShuffled(unsigned int i)
+{
+    return shuffledInts[i];
+}
 int Level::GetHeightForMouse(int x, int y)
 {
 	if(GetTile(x, y))
 		return GetTile(x, y)->GetHeight()[1];
 }
 
-void Level::GradeBuilding(sf::IntRect bounds)
+int Level::GradeBuilding(sf::IntRect bounds)
 {
+    //modify bounds to within map
+    bounds.left = bounds.left < 0 ? 0 : bounds.left;
+    bounds.top = bounds.top < 0 ? 0 : bounds.top;
+    bounds.width = bounds.left +bounds.width < GetWidth() ? bounds.width : GetWidth() -bounds.left;
+    bounds.height = bounds.top +bounds.height < GetWidth() ? bounds.height : GetWidth() -bounds.top;
     int plotavg = 0;
     for(int i = bounds.left; i < bounds.width; i++)
 	{
 		for(int j = bounds.top; j < bounds.height; j++)
 		{
-			if(GetTile(i, j) != 0)
-			{
 				int tileavg = (GetTile(i, j)->GetHeight()[0] +GetTile(i, j)->GetHeight()[1] +GetTile(i, j)->GetHeight()[2] +GetTile(i, j)->GetHeight()[3])/4;
-				for (int k = 0; k < 4; k++)
-					GetTile(i, j)->SetHeight(tileavg, k);
 				plotavg += tileavg;
-			}
 		}
 	}
 	plotavg /= bounds.width * bounds.height;
-	for(int i = bounds.left; i < bounds.width; i++)
-	{
-		for(int j = bounds.top; j < bounds.height; j++)
-		{
-			if(GetTile(i, j) != 0)
-			{
-				for (int k = 0; k < 4; k++)
-					GetTile(i, j)->SetHeight(plotavg, k);
-			}
-		}
-	}
+	for(int i = bounds.left ; i < bounds.width +1; i++)
+		for(int j = bounds.top ; j < bounds.height +1; j++)
+            if(plotavg -(GetTile(i, j)->GetHeight()[1]))
+                Terraform(i, j, plotavg -(GetTile(i, j)->GetHeight()[1]));
+	return plotavg;
 }

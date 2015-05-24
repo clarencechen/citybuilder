@@ -61,4 +61,16 @@
 		<tile x="3" y="3" frames="1" size="3" id="132"/>
 		<tile x="6" y="3" frames="1" size="3" id="133"/>
 	</imagefile>
+	<imagefile path="residential.png">
+		<tile x="0" y="0" frames="1" size="3" id="115"/>
+		<tile x="0" y="3" frames="1" size="3" id="195"/>
+	</imagefile>
+	<imagefile path="commercial.png">
+		<tile x="0" y="0" frames="1" size="3" id="116"/>
+		<tile x="0" y="3" frames="1" size="3" id="196"/>
+	</imagefile>
+	<imagefile path="industrial.png">
+		<tile x="0" y="0" frames="1" size="3" id="117"/>
+		<tile x="0" y="3" frames="1" size="3" id="197"/>
+	</imagefile>
 </tileset>

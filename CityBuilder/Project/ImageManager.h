@@ -16,7 +16,7 @@ public:
 	ImageManager();
 	~ImageManager();
 	void AddImage(sf::Texture& image, int id);
-	sf::Texture& GetImage(int id);
+	sf::Texture* GetImage(int id);
 
 	//Loads tileset from xml format
 	void LoadTileset(std::string filename);

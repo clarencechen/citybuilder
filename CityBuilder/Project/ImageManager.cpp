@@ -29,9 +29,9 @@ void ImageManager::AddImage(sf::Texture& image, int id)
 	imageIDs[id] = imageList.size() - 1;
 }
 
-sf::Texture& ImageManager::GetImage(int id)
+sf::Texture* ImageManager::GetImage(int id)
 {
-	return imageList[imageIDs[id]];
+	return &(imageList[imageIDs[id]]);
 }
 
 void ImageManager::LoadTileset(std::string filename)

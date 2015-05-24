@@ -2,24 +2,19 @@
 #define STRUCTURE_H
 
 #include <SFML\Graphics.hpp>
-#include "ImageManager.h"
+#include "Building.h"
 
 class Level;
 class Structure : public Building
 {
+friend class City;
 protected:
-	unsigned int idbuffer;
+	unsigned int maxPopServed;
 public:
-	unsigned int id;
+	static unsigned int constexpr maxPopRef[8] = { 1000, 500, 500, 500, 1000, 1000, 0, 0};
 	Structure(unsigned int id, int x, int y, int z, bool preview);
-	void Reset(ImageManager& imageManager);
-	//below 5 used for draggables only
-	void Add(unsigned int id, bool preview);
+	void Reset();
 	sf::Vector2u GetDisplayTile(Level* level);
-	void MatchNetwork(bool preview, Level* level);
-	unsigned int GetRoad();
-	unsigned int GetRail();
-
 	sf::Vector2u GetFootprint();
 };
 

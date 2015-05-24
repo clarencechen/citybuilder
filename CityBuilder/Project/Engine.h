@@ -2,15 +2,35 @@
 #define _ENGINE_H
 
 #include <SFML\Graphics.hpp>
-
-#include "TerrainTile.h"
-#include "ImageManager.h"
-#include "Infrastructure.h"
+#include <set>
 #include "Level.h"
+#include "City.h"
+#include "ImageManager.h"
+#include "Tile.h"
+
+struct PreviewOrder
+{
+    sf::IntRect selection;
+    unsigned int mode;
+    bool stick;
+    PreviewOrder()
+    {
+        selection = sf::IntRect(0,0,0,0);
+        mode = 0;
+        stick = true;
+    }
+    PreviewOrder(sf::IntRect s, unsigned int r, bool stick)
+    {
+        selection = s;
+        mode = r;
+        this->stick = stick;
+    }
+};
 
 class Engine
 {
 private:
+	std::set<unsigned int> alreadyDone;
 	static const int tilesize = 32;
 	//SFML Render Window
 	sf::RenderWindow* window;
@@ -19,15 +39,18 @@ private:
 	//Render Window (and Camera) size
 	sf::Vector2i videoSize;
 
+    //counter used for simulation;
+    long long int counter;
+
 	//Camera
 	sf::View* view;
 
-	//Current Level
+	//Current Level/Map
 	Level* currentLevel;
-
-
+	City* currentCity;
+    //stores current preview order each cycle;
+    PreviewOrder po;
 	sf::Vector2f delta;
-	sf::Vector2f target;
 
 	//Initializes the engine
 	bool Init();
@@ -37,12 +60,16 @@ private:
 	void RenderFrame();
 	//Processes user input
 	void ProcessInput();
+	//Simulate changes
+	void Simulate(int speed);
 	sf::Vector2i FindTile(sf::Vector2f mouse);
 	sf::Vector2i FindPoint(sf::Vector2f mouse);
 	void FindCoord(sf::Vector2f& mouse);
 	void ProcessKeyInput(sf::Keyboard::Key);
 	//Updates all Engine internals
-	void Update(float speed);
+	void MoveCamera(float speed);
+	//simulation speed
+	int simSpeed;
 	//States for building
 	sf::IntRect selection;
 	sf::Vector2i start;
@@ -56,5 +83,4 @@ public:
 
 	void Go();					//Starts the engine
 };
-
 #endif

@@ -1,11 +1,12 @@
 #include <vector>
 #include <string>
 #include <fstream>
-
+#include <iostream>
+#include <algorithm>
 #include "Level.h"
 #include "Infrastructure.h"
 #include "ImageManager.h"
-#include "TerrainTile.h"
+#include "Tile.h"
 
 
 #include "rapidxml.hpp"
@@ -14,6 +15,7 @@ using namespace rapidxml;
 
 Level::Level()
 {
+
 }
 
 Level::~Level()
@@ -36,11 +38,7 @@ void Level::SetDimensions(int w, int h)
 	map = std::vector<std::vector<TerrainTile*> >(w, std::vector<TerrainTile*>(h));
 	buildings = std::vector<std::vector<Building*> >(w, std::vector<Building*>(h));
 	bridges = std::vector<std::vector<std::vector<Draggable*> > >(w, std::vector<std::vector<Draggable*> >(h, std::vector<Draggable*>(8)));
-}
-
-void Level::AddTile(int x, int y, TerrainTile* tile)
-{
-	map[x][y] = tile;
+	Shuffle();
 }
 
 TerrainTile* Level::GetTile(unsigned int x, unsigned int y)
@@ -82,7 +80,7 @@ void Level::LoadLevel(std::string filename, ImageManager& imageManager)
 		while(std::getline(inFile, line))
 			xmlContents += line;
 	}
-
+    std::cout << "Finished dumping file." << std::endl;
 	//Convert string to rapidxml readable char*
 	std::vector<char> xmlData = std::vector<char>(xmlContents.begin(), xmlContents.end());
     xmlData.push_back('\0');
@@ -113,16 +111,23 @@ void Level::LoadLevel(std::string filename, ImageManager& imageManager)
 		//Go to next tileset
 		tileset = tileset->next_sibling("tileset");
 	}
-
+    std::cout << "Finished loading tileset." << std::endl;
 	//Go through each tile
 	xml_node<>* tile = root->first_node("tile");
 	//Fill in all tiles with default values
+	tex = imageManager.GetImage(0);
 	for(int i = 0; i < w; i++)
     {
         for(int j = 0; j < h; j++)
-        {
-                TerrainTile* newTile = new TerrainTile(0, i, j, 0, imageManager);
-                AddTile(i, j, newTile);
-        }
+            map[i][j] = new TerrainTile(i, j, tex);
+     //   std::cout << "Created tile row " << i << std::endl;
     }
+}
+void Level::Shuffle()
+{
+    while(this->shuffledInts.size() < (w*h))
+        this->shuffledInts.push_back(0);
+    std::iota(shuffledInts.begin(), shuffledInts.end(), 1);
+    std::random_shuffle(shuffledInts.begin(), shuffledInts.end());
+    return;
 }

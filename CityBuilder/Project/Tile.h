@@ -2,20 +2,17 @@
 #define _TERRAINTILE_H
 
 #include <SFML\Graphics.hpp>
-#include "ImageManager.h"
 class TerrainTile
 {
 private:
 	int x;
 	int y;
 	int z[4];
-	unsigned int baseid;
-    unsigned int transform;
     bool preview[4];
-    sf::Texture texture;
+    sf::Texture* texture;
 public:
 	static const int tilesize = 32;
-	TerrainTile(int baseid, int x, int y, int transform, ImageManager& imageManager);
+	TerrainTile(int x, int y, sf::Texture* tex);
 	~TerrainTile();
 	void Draw(sf::Vector2i camOffset, sf::RenderWindow* rw);
 	int(&GetHeight())[4];

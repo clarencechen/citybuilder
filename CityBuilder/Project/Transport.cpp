@@ -1,21 +1,21 @@
 #include <SFML\Graphics.hpp>
 #include <math.h>
+#include <iostream>
 #include "Level.h"
 #include "Building.h"
-#include "ImageManager.h"
 #include "Infrastructure.h"
-#include "TerrainTile.h"
+#include "Tile.h"
 #include "Transport.h"
 
-Draggable::Draggable(unsigned int id, int x, int y, int z[4], bool preview, Level* level) : Building(x, y, z, preview)
+Draggable::Draggable(unsigned int r, int x, int y, int z[4], bool preview, Level* level) : Building(x, y, z, preview)
 {
-
-	stick = true;
+	type = Type::DRAGGABLE;
+	id = 1;
 	neighbors[0] = level->GetBuilding(x, y - 1);
 	neighbors[1] = level->GetBuilding(x + 1, y);
 	neighbors[2] = level->GetBuilding(x, y + 1);
 	neighbors[3] = level->GetBuilding(x - 1, y);
-	switch (id)
+	switch (r)
 	{
 	case 1:
 	{
@@ -48,14 +48,14 @@ Draggable::Draggable(unsigned int id, int x, int y, int z[4], bool preview, Leve
 	}
 }
 
-Draggable::Draggable(unsigned int id, int x, int y, int z, bool preview, Level* level) : Building(x, y, z, preview)
+Draggable::Draggable(unsigned int r, int x, int y, int z, bool preview, Level* level) : Building(x, y, z, preview)
 {
-	stick = false;
+    id = 1;
 	neighbors[0] = level->GetBridge(x, y - 1, z);
 	neighbors[1] = level->GetBridge(x + 1, y, z);
 	neighbors[2] = level->GetBridge(x, y + 1, z);
 	neighbors[3] = level->GetBridge(x - 1, y, z);
-	switch (id)
+	switch (r)
 	{
 	case 1:
 	{
@@ -109,9 +109,9 @@ void Draggable::SetRail(unsigned int r, bool preview)
 		railBuffer = r;
 }
 
-void Draggable::Reset(ImageManager& imageManager)
+void Draggable::Reset()
 {
-	Building::Reset(imageManager);
+	Building::Reset();
 	roadState = roadBuffer;
 	railState = railBuffer;
 }
@@ -256,8 +256,10 @@ sf::Vector2u Draggable::GetDisplayTile(Level* level)
 		{
 			//return 41
 			if(road[0] == road[1] == road[2] == road[3] == 2)
-				return sf::Vector2u(41, 0);
-
+				{
+				    std::cout << "41 returned" << std::endl;
+				    return sf::Vector2u(41, 0);
+				}
 			for(int i = 0; i < 4; i++)
 			{
 				//return 31
