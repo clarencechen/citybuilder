@@ -7,7 +7,7 @@ City::City()
 {
     birthRate = 5.078125e-5;
     deathRate = 3.183594e-5;
-    immigrationRate = 0.005f;
+    immigrationRate = 0.002f;
     emigrationRate = 0;
     propCanWork = 0.50f;
     populationPool = 1.0f;
@@ -37,7 +37,7 @@ void City::Update(Level* level)
     for(int i = 0; i < (level->GetHeight()*level->GetWidth()); ++i)
     {
         z = level->GetBuilding(level->GetShuffled(i)/level->GetWidth(), level->GetShuffled(i)%level->GetWidth());
-        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(i))
+        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y))
             continue;
         unsigned int r = z->id;
         if(r % 3 == 1)//residential
@@ -61,14 +61,14 @@ void City::Update(Level* level)
             if(rand() % 100 < 15 * (1.0 -industrialTax))
                 DistributePool(employmentPool, z, 0.0f);
         }
-        alreadyDone.insert(level->GetShuffled(i));
+        alreadyDone.insert(level->GetShuffled(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y));
     }
     alreadyDone.clear();
     /* Run second pass. Mostly handles goods manufacture */
     for(int i = 0; i < (level->GetHeight()*level->GetWidth()); ++i)
     {
         z = level->GetBuilding(level->GetShuffled(i)/level->GetWidth(), level->GetShuffled(i)%level->GetWidth());
-        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(i))
+        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y))
             continue;
         unsigned int r = z->id;
         if(r % 3 == 0)//industrial
@@ -96,14 +96,14 @@ void City::Update(Level* level)
             if(z->storedGoods < z->variant*5)
             z->storedGoods += (receivedResources +z->production)*z->variant;
         }
-        alreadyDone.insert(level->GetShuffled(i));
+        alreadyDone.insert(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y);
     }
     alreadyDone.clear();
     /* Run third pass. Mostly handles goods distribution. */
     for(int i = 0; i < (level->GetHeight()*level->GetWidth()); ++i)
     {
         z = level->GetBuilding(level->GetShuffled(i)/level->GetWidth(), (level->GetShuffled(i))%level->GetWidth());
-        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(i))
+        if(!z || z->id == 1 || z->id >= 32 || z->GetPreview() || alreadyDone.count(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y))
             continue;
         unsigned int r = z->id;
         if(r % 3 == 2)//commercial
@@ -135,7 +135,7 @@ void City::Update(Level* level)
             float revenue = z->production * maxCustomers * z->residents / 100.0;
             commercialRevenue += revenue;
         }
-        alreadyDone.insert(level->GetShuffled(i));
+        alreadyDone.insert(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y);
     }
     alreadyDone.clear();
     /* Adjust population pool for births and deaths, and immigration. */
@@ -192,7 +192,7 @@ void City::DistributePool(float& pool, Building* b, float rate)
     {
         pool += b->residents - maxPop;
         b->residents = maxPop;
-        immigrationRate = fabs(immigrationRate -b->variant*0.0001f);
+        immigrationRate = fabs(immigrationRate -b->variant*0.00001f);
     }
     // Construct new zones if there is enough demand
     if(pool > b->maxPopPerVariant * pow(2, b->variant +1) && b->variant < b->maxVariants)
@@ -200,7 +200,7 @@ void City::DistributePool(float& pool, Building* b, float rate)
         {
             //++b->variant;
             b->variant += 4;
-            immigrationRate += b->variant*0.0001f;
+            immigrationRate += b->variant*0.00001f;
         }
     b->SetStatus(b->GetDisplayTile(0), false);
 }
