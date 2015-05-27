@@ -7,7 +7,7 @@ City::City()
 {
     birthRate = 5.078125e-5;
     deathRate = 3.183594e-5;
-    immigrationRate = 0.002f;
+    immigrationRate = 1e-4;
     emigrationRate = 0;
     propCanWork = 0.50f;
     populationPool = 1.0f;
@@ -61,7 +61,7 @@ void City::Update(Level* level)
             if(rand() % 100 < 15 * (1.0 -industrialTax))
                 DistributePool(employmentPool, z, 0.0f);
         }
-        alreadyDone.insert(level->GetShuffled(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y));
+        alreadyDone.insert(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y);
     }
     alreadyDone.clear();
     /* Run second pass. Mostly handles goods manufacture */
@@ -94,7 +94,7 @@ void City::Update(Level* level)
             }
             /* Turn resources into goods */
             if(z->storedGoods < z->variant*5)
-            z->storedGoods += (receivedResources +z->production)*z->variant;
+				z->storedGoods += (receivedResources +z->production)*z->variant;
         }
         alreadyDone.insert(z->GetAnchor().x*level->GetHeight() +z->GetAnchor().y);
     }
@@ -166,6 +166,7 @@ void City::Budget()
     std::cout << "City Earnings: " << earnings << std::endl;
     funds += earnings;
     std::cout << "New City Funds: " << funds << std::endl;
+    earnings = 0;
 }
 
 void City::DistributePool(float& pool, Building* b, float rate)
@@ -192,7 +193,7 @@ void City::DistributePool(float& pool, Building* b, float rate)
     {
         pool += b->residents - maxPop;
         b->residents = maxPop;
-        immigrationRate = fabs(immigrationRate -b->variant*0.00001f);
+        immigrationRate = immigrationRate -b->variant*1e-5;
     }
     // Construct new zones if there is enough demand
     if(pool > b->maxPopPerVariant * pow(2, b->variant +1) && b->variant < b->maxVariants)
@@ -200,7 +201,7 @@ void City::DistributePool(float& pool, Building* b, float rate)
         {
             //++b->variant;
             b->variant += 4;
-            immigrationRate += b->variant*0.00001f;
+            immigrationRate += b->variant*1e-5;
         }
     b->SetStatus(b->GetDisplayTile(0), false);
 }

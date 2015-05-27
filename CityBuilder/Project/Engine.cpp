@@ -285,8 +285,8 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 		//hospital
 		else if(code == sf::Keyboard::H)
 			mode = 36;
-		//library
-		else if(code == sf::Keyboard::L)
+		//high school
+		else if(code == sf::Keyboard::J)
 			mode = 37;
         //demolish
         else if(code == sf::Keyboard::Escape)

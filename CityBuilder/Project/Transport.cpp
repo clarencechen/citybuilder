@@ -136,12 +136,6 @@ void Draggable::Add(unsigned int id, bool preview)
 		if(!preview)
 			railBuffer = 1;
 		break;
-//	case 4:
-//		if(railState == 1 && roadState == 0)
-//			railState = 2;
-//		if(!preview && railState == 1 && roadBuffer == 0)
-//			railBuffer = 2;
-//		break;
 	}
 }
 
@@ -194,11 +188,6 @@ void Draggable::MatchNetwork(bool preview, Level* level)
 		else if((rail[0] && rail[2]) || (rail[1] && rail[3]))
 			SetRoad(0, preview);
 	}
-//	else if(railState == 2)
-//	{
-//		if(!(rail[0] && !rail[1] && rail[2] && !rail[3]) && !(!rail[0] && rail[1] && !rail[2] && rail[3]))
-//			SetRail(1, preview);
-//	}
 }
 
 
@@ -255,11 +244,8 @@ sf::Vector2u Draggable::GetDisplayTile(Level* level)
 		case 2 ://large road
 		{
 			//return 41
-			if(road[0] == road[1] == road[2] == road[3] == 2)
-				{
-				    std::cout << "41 returned" << std::endl;
-				    return sf::Vector2u(41, 0);
-				}
+			if(road[0] == 2 && road[1] == 2 && road[2] == 2 && road[3] == 2)
+				return sf::Vector2u(41, 0);
 			for(int i = 0; i < 4; i++)
 			{
 				//return 31
