@@ -48,6 +48,7 @@ int(&TerrainTile::GetHeight())[4]
 	return z;
 }
 
+//elevation is always 1 or -1
 void TerrainTile::Raise(int elevation, int corner)
 {
 	if(elevation != 0)

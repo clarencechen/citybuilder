@@ -43,7 +43,7 @@ public:
 	Building*(&GetNeighbors(unsigned int x, unsigned int y, int z, bool stick))[4];
 
 	void Terraform(int x, int y, int raise);
-	int GetHeightForMouse(int x, int y);
+	int GetHeight(int x, int y, int corner);
 	int GradeBuilding(sf::IntRect bounds);
 
 	std::vector<Draggable*> GetBridge(unsigned int x, unsigned int y);

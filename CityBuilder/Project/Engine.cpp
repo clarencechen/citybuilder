@@ -247,7 +247,7 @@ void Engine::FindCoord(sf::Vector2f& mouse)
 	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
 	mouse = inv.transformPoint(mouse.x, mouse.y);
 	mouse += sf::Vector2f(0.5, 0.5);
-	int height = currentLevel->GetHeightForMouse((int)mouse.x, (int)mouse.y);
+	int height = currentLevel->GetHeight((int)mouse.x, (int)mouse.y, 1);
 	mouse += sf::Vector2f(-(float)height/4, (float)height/4);
 }
 

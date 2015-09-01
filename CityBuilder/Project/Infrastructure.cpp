@@ -197,26 +197,33 @@ Building* Level::GetBuilding(unsigned int x, unsigned int y)
     else
         return 0;
 }
-
+//raise is always 1 or -1
 void Level::Terraform(int x, int y, int raise)
 {
 	bool valid = GetTile(x - 1, y + 1) && GetTile(x - 1, y) && GetTile(x, y) && GetTile(x, y + 1);
-	if(valid)
-	{
-        GetTile(x, y)->Raise(raise, 1);
-		GetTile(x, y + 1)->Raise(raise, 0);
-		GetTile(x - 1, y + 1)->Raise(raise, 3);
-		GetTile(x - 1, y)->Raise(raise, 2);
-    }
+	if(!valid)
+		return;
+	GetTile(x, y)->Raise(raise, 1);
+	GetTile(x, y + 1)->Raise(raise, 0);
+	GetTile(x - 1, y + 1)->Raise(raise, 3);
+	GetTile(x - 1, y)->Raise(raise, 2);
+	if(abs(GetHeight(x, y, 1) -GetHeight(x, y, 2)) == 4)
+		Terraform(x + 1, y, raise);
+	if(abs(GetHeight(x, y + 1, 0) -GetHeight(x, y + 1, 1)) == 4)
+		Terraform(x, y + 1, raise);
+	if(abs(GetHeight(x - 1, y + 1, 3) -GetHeight(x - 1, y + 1, 0)) == 4)
+		Terraform(x - 1, y, raise);
+	if(abs(GetHeight(x - 1, y, 2) -GetHeight(x - 1, y, 3)) == 4)
+		Terraform(x, y - 1, raise);
 }
 unsigned int Level::GetShuffled(unsigned int i)
 {
     return shuffledInts[i];
 }
-int Level::GetHeightForMouse(int x, int y)
+int Level::GetHeight(int x, int y, int corner)
 {
 	if(GetTile(x, y))
-		return GetTile(x, y)->GetHeight()[1];
+		return GetTile(x, y)->GetHeight()[corner];
 }
 
 int Level::GradeBuilding(sf::IntRect bounds)
