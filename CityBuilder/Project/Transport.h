@@ -17,6 +17,8 @@ protected:
 public:
 	Draggable(unsigned int id, int x, int y, int z[4], bool preview, Level* level);
 	Draggable(unsigned int id, int x, int y, int z, bool preview, Level* level);
+	void SetRoad(unsigned int r, bool preview);
+	void SetRail(unsigned int r, bool preview);
 	void Add(unsigned int id, bool preview);
 	void MatchNetwork(bool preview, Level* level);
 	sf::Vector2u GetDisplayTile(Level* level);
@@ -24,9 +26,6 @@ public:
 	void Reset();
 	unsigned int GetRoad();
 	unsigned int GetRail();
-	void SetRoad(unsigned int r, bool preview);
-	void SetRail(unsigned int r, bool preview);
-
 };
 
 #endif

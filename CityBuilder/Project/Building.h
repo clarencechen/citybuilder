@@ -33,8 +33,8 @@ public:
 	static const int tilesize = 32;
 	Building(int x, int y, int z, bool preview);
 	Building(int x, int y, int z[4], bool preview);
-	~Building();
-	void Draw(sf::Vector2i camOffset, sf::RenderWindow* rw, ImageManager& imagemanager);
+	virtual ~Building();
+	void Draw(sf::RenderWindow* rw, ImageManager& imagemanager);
 	void SetStatus(sf::Vector2u status, bool preview);
 	bool GetDel();
 	bool GetPreview();

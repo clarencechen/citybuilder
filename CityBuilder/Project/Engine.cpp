@@ -10,6 +10,7 @@
 Engine::Engine(int w, int h)
 {
     delta = sf::Vector2f(0,0);
+    epsilon = 1;
 	videoSize = sf::Vector2i(w, h);
 	mode = 0;
 	selection = sf::IntRect(mode, 0, 0, 0);
@@ -57,33 +58,24 @@ void Engine::RenderFrame()
 	TerrainTile* tile;
 	Building* building;//Makes sure we do not draw multiple identical buildings
 	std::vector<Draggable*> column;
-	//Get the tile bounds we need to draw
-	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
-	sf::Vector2f size(view->getSize()/(float)tilesize);
-	sf::Vector2f center(view->getCenter()/(float)tilesize);
-	//Transform the center into world coords
-	center = inv.transformPoint(center);
-	//Set the bounds as the bounding diamond of tiles
-	sf::FloatRect bounds(center -.75f*size, 1.5f*size);
 	//Figure out how much to offset each tile
-	sf::Vector2i camOffset = sf::Vector2i(view->getCenter());
 	//Loop through and draw each tile
 	//We're keeping track of two variables in each loop. How many tiles
 	//we've drawn (x and y), and which tile on the map we're drawing (tileX
 	//and tileY)
-    for(int y = 0, tileY = (int)(bounds.top); y <= (int)(bounds.height) + 1; y++, tileY++)
+	for(int y = 0, tileY = 0; y <= currentLevel->GetHeight(); y++, tileY++)
 	{
-		for(int x = 0, tileX = (int)(bounds.left + bounds.width); x <= (int)(bounds.width) + 1; x++, tileX--)
+		for(int x = 0, tileX = currentLevel->GetWidth(); x <= currentLevel->GetWidth(); x++, tileX--)
 		{
 			//Get the tile we're drawing
 			tile = currentLevel->GetTile(tileX, tileY);
 			if(tile)
-				tile->Draw(camOffset, window);
+				tile->Draw(window);
 		}
 	}
-	for(int y = 0, tileY = (int)(bounds.top); y <= (int)(bounds.height) + 1; y++, tileY++)
+	for(int y = 0, tileY = 0; y <= currentLevel->GetHeight(); y++, tileY++)
 	{
-		for(int x = 0, tileX = (int)(bounds.left + bounds.width); x <= (int)(bounds.width) + 1; x++, tileX--)
+		for(int x = 0, tileX = currentLevel->GetWidth(); x <= currentLevel->GetWidth(); x++, tileX--)
 		{
 			//Get the building we're drawing
 			building = currentLevel->GetBuilding(tileX, tileY);
@@ -91,12 +83,12 @@ void Engine::RenderFrame()
 			//check if building exists has not already been drawn
 			if(building && !(alreadyDone.count(building->GetAnchor().x*currentLevel->GetHeight() +building->GetAnchor().y)))
             {
-                building->Draw(camOffset, window, imageManager);
+                building->Draw(window, imageManager);
                 alreadyDone.insert(building->GetAnchor().x*currentLevel->GetHeight() +building->GetAnchor().y);
             }
 			for(auto& network : column)
 				if(network)
-					network->Draw(camOffset, window, imageManager);
+					network->Draw(window, imageManager);
 		}
     }
     alreadyDone.clear();
@@ -112,6 +104,11 @@ void Engine::ProcessInput()
 
 		if(evt.type == sf::Event::Closed)
 			window->close();
+		if(evt.type == sf::Event::Resized)
+		{
+			view->setSize(evt.size.width, evt.size.height);
+			window->setView(*view);
+		}
         if(evt.type == sf::Event::KeyPressed)
             ProcessKeyInput(evt.key.code);
 		if((evt.type == sf::Event::MouseButtonPressed) && (mouseDown == false))
@@ -221,6 +218,13 @@ void Engine::ProcessInput()
 			}
 			mouseDown = false;
 		}
+		if(evt.type == sf::Event::MouseWheelScrolled)
+		{
+			if(evt.mouseWheelScroll.delta < 0)
+				epsilon = sqrt(2.f);
+			else
+				epsilon = sqrt(0.5f);
+		}
 	}
 }
 
@@ -240,9 +244,7 @@ sf::Vector2i Engine::FindPoint(sf::Vector2f mouse)
 
 void Engine::FindCoord(sf::Vector2f& mouse)
 {
-	mouse -= view->getSize() / 2.0f;
-	sf::Vector2f center(view->getCenter().x, view->getCenter().y);
-	mouse += center;
+	mouse = window->mapPixelToCoords(sf::Vector2i(mouse));
 	mouse /= (float)tilesize;
 	sf::Transform inv(0.5f,-1.f,0.f,0.5f,1.f,0.f,0.f,0.f,0.f);
 	mouse = inv.transformPoint(mouse.x, mouse.y);
@@ -351,14 +353,19 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 
 void Engine::MoveCamera(float speed)
 {
-    //X distance to target, Y distance to target, and Euclidean distance
+    std::cout << view->getCenter().x << " " << view->getCenter().y << " " << std::endl;
+    //Euclidean distance
 	float d = sqrt(delta.x*delta.x + delta.y*delta.y);
 	//Velocity magnitudes
-    float v = 0.0f;
+    float v = 0.f;
 	//If we're within 1 pixel of the target already, just snap
 	//to target and stay there. Otherwise, continue
 	if((d*d) <= 1)
-		delta = sf::Vector2f(0,0);
+	{
+		view->move(delta);
+		window->setView(*view);
+		delta = sf::Vector2f(0.f, 0.f);
+	}
 	else
 	{
 		//We set our velocity to move 1/60th of the distance to
@@ -373,11 +380,30 @@ void Engine::MoveCamera(float speed)
 		if(v < 1.0f)
 			v = 1.0f;
 
-		//Similar triangles to get vx and vy
-		sf::Vector2f vc(delta * (v/d));
+		//Similar triangles to get vc
+		sf::Vector2f vc((delta/d)*v);
         view->move(vc);
-        delta = delta - vc;
+        window->setView(*view);
+        delta -= vc;
     }
+}
+
+void Engine::ZoomCamera(float speed)
+{
+	float v = 0.f;
+	if(fabs(1 -epsilon) <= 1e-4)
+	{
+		view->zoom(epsilon);
+		window->setView(*view);
+		epsilon = 1;
+	}
+	else
+	{
+		v = pow(epsilon, speed/60.);
+		view->zoom(v);
+		window->setView(*view);
+		epsilon /= v;
+	}
 }
 
 void Engine::Simulate(int simSpeed)
@@ -402,6 +428,7 @@ void Engine::MainLoop()
 	{
 		ProcessInput();
         MoveCamera(15.0f);
+        ZoomCamera(15.0f);
         Simulate(simSpeed);
 		RenderFrame();
     }

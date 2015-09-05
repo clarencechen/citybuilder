@@ -20,18 +20,17 @@ TerrainTile::~TerrainTile()
 
 }
 
-void TerrainTile::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw)
+void TerrainTile::Draw(sf::RenderWindow* rw)
 {
 	sf::VertexArray quad(sf::Quads, 4);
-	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y																	-z[1]*tilesize/4);
-	quad[2].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	+(int)texture->getSize().y,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-(int)(texture->getSize().y)/2									-z[2]*tilesize/4);
-	quad[3].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	-(int)texture->getSize().x		+(int)texture->getSize().y,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-((int)(texture->getSize().x)	+(int)(texture->getSize().y))/2	-z[3]*tilesize/4);
-	quad[0].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	-(int)texture->getSize().x,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-(int)(texture->getSize().x)/2									-z[0]*tilesize/4);
-
+	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize	,
+									y*tilesize/2	-x*tilesize/2																	-z[1]*tilesize/4);
+	quad[2].position = sf::Vector2f(y*tilesize		+x*tilesize		+(int)(texture->getSize().y),
+									y*tilesize/2	-x*tilesize/2	-(int)(texture->getSize().y)/2									-z[2]*tilesize/4);
+	quad[3].position = sf::Vector2f(y*tilesize		+x*tilesize		-(int)(texture->getSize().x)	+(int)(texture->getSize().y),
+									y*tilesize/2	-x*tilesize/2	-((int)(texture->getSize().x)	+(int)(texture->getSize().y))/2	-z[3]*tilesize/4);
+	quad[0].position = sf::Vector2f(y*tilesize		+x*tilesize		-(int)(texture->getSize().x),
+									y*tilesize/2	-x*tilesize/2	-(int)(texture->getSize().x)/2									-z[0]*tilesize/4);
     quad[0].texCoords = sf::Vector2f(0, 0);
     quad[1].texCoords = sf::Vector2f(0, texture->getSize().y);
     quad[2].texCoords = sf::Vector2f(texture->getSize().x, texture->getSize().y);

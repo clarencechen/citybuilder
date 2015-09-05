@@ -45,7 +45,7 @@ Building::Building(int x, int y, int z[4], bool preview)
 
 Building::~Building()
 {
-	//dtor
+
 }
 
 void Building::SetStatus(sf::Vector2u status, bool preview)
@@ -100,18 +100,18 @@ unsigned int Building::GetRail() {return 0;}
 void Building::Add(unsigned int id, bool preview) {}
 void Building::MatchNetwork(bool preview, Level* level) {}
 
-void Building::Draw(sf::Vector2i camOffset, sf::RenderWindow* rw, ImageManager& imageManager)
+void Building::Draw(sf::RenderWindow* rw, ImageManager& imageManager)
 {
 	texture = imageManager.GetImage(baseid);
 	sf::VertexArray quad(sf::Quads, 4);
-	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y																	-z[1]*tilesize/4);
-	quad[2].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	+(int)texture->getSize().y,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-(int)(texture->getSize().y)/2									-z[2]*tilesize/4);
-	quad[3].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	-(int)texture->getSize().x		+(int)texture->getSize().y,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-((int)(texture->getSize().x)	+(int)(texture->getSize().y))/2	-z[3]*tilesize/4);
-	quad[0].position = sf::Vector2f(y*tilesize		+x*tilesize		-camOffset.x	-(int)texture->getSize().x,
-									y*tilesize/2	-x*tilesize/2	-camOffset.y	-(int)(texture->getSize().x)/2									-z[0]*tilesize/4);
+	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize		,
+									y*tilesize/2	-x*tilesize/2																		-z[1]*tilesize/4);
+	quad[2].position = sf::Vector2f(y*tilesize		+x*tilesize		+(int)(texture->getSize().y),
+									y*tilesize/2	-x*tilesize/2	-(int)(texture->getSize().y)/2									-z[2]*tilesize/4);
+	quad[3].position = sf::Vector2f(y*tilesize		+x*tilesize		-(int)(texture->getSize().x)	+(int)(texture->getSize().y),
+									y*tilesize/2	-x*tilesize/2	-((int)(texture->getSize().x)	+(int)(texture->getSize().y))/2	-z[3]*tilesize/4);
+	quad[0].position = sf::Vector2f(y*tilesize		+x*tilesize		-(int)(texture->getSize().x),
+									y*tilesize/2	-x*tilesize/2	-(int)(texture->getSize().x)/2									-z[0]*tilesize/4);
 	switch (transform)
 	{
 		case 0:

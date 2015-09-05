@@ -41,10 +41,16 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
 				{
 					Building* n = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
 					if(n)
-					{
 						n->MatchNetwork(preview, this);
+				}
+			}
+			for(int i = anchor.x - 1; i <= anchor.x + 1; i++)
+			{
+				for(int j = anchor.y - 1; j <= anchor.y + 1; j++)
+				{
+					Building* n = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
+					if(n)
 						n->SetStatus(n->GetDisplayTile(this), preview);
-					}
 				}
 			}
 		}
@@ -67,10 +73,16 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
 				{
 					Building* n = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
 					if(n)
-					{
 						n->MatchNetwork(preview, this);
+				}
+			}
+			for(int i = x - 1; i <= x + 1; i++)
+			{
+				for(int j = y - 1; j <= y + 1; j++)
+				{
+					Building* n = stick ? GetBuilding(i, j) : GetBridge(i, j, z);
+					if(n)
 						n->SetStatus(n->GetDisplayTile(this), preview);
-					}
 				}
 			}
         }

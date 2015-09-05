@@ -153,24 +153,27 @@ void Draggable::MatchNetwork(bool preview, Level* level)
 							neighbors[1] ? neighbors[1]->GetRail() : 0,
 							neighbors[2] ? neighbors[2]->GetRail() : 0,
 							neighbors[3] ? neighbors[3]->GetRail() : 0};
-    if(roadState == 1 && railState == 0)
+    if(roadState == 1 && !railState)
     {
-        bool one = (road[0] != 2 && road[1] != 2 && road[2] != 2 && road[3] != 2);
+        bool two = (road[0] == 2 || road[1] == 2 || road[2] == 2 || road[3] == 2);
         for(int i = 0; i < 4; i++)
         {
-            if(road[i] == 2 &&
-                    road[(i + 1) % 4] != 1 && road[(i + 1) % 4] != 2 &&
-                    road[(i + 3) % 4] != 1 && road[(i + 3) % 4] != 2 &&
-                    road[(i + 2) % 4] != 2)
-                one = true;
+            if(	road[i] == 2 && !road[(i + 1) % 4] &&
+				road[(i + 2) % 4] != 2 && !road[(i + 3) % 4])
+                two = false;
         }
-        if(!one)
+        if(two)
             SetRoad(2, preview);
     }
-    else if(roadState == 2 && railState == 0)
+    else if(roadState == 2 && !railState)
     {
-        bool one = (road[0] != 2 && road[1] != 2 && road[2] != 2 && road[3] != 2);
-        if(one && road[0] && road[1] && road[2] && road[3])
+        bool one = (road[0] != 2 && road[1] != 2 && road[2] != 2 && road[3] != 2) && (road[0] || road[1] || road[2] || road[3]);
+		for(int i = 0; i < 4; i++)
+        {
+        	if(road[i] && !road[(i + 1) % 4] && !road[(i + 3) % 4])
+				one = false;
+        }
+        if(one)
 			SetRoad(1, preview);
     }
     else if(roadState && railState == 1)

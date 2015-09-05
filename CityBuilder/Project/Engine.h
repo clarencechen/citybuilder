@@ -51,7 +51,7 @@ private:
     //stores current preview order each cycle;
     PreviewOrder po;
 	sf::Vector2f delta;
-
+	float epsilon;
 	//Initializes the engine
 	bool Init();
 	//Main Game Loop
@@ -68,6 +68,7 @@ private:
 	void ProcessKeyInput(sf::Keyboard::Key);
 	//Updates all Engine internals
 	void MoveCamera(float speed);
+	void ZoomCamera(float speed);
 	//simulation speed
 	int simSpeed;
 	//States for building

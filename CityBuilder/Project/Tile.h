@@ -14,7 +14,7 @@ public:
 	static const int tilesize = 32;
 	TerrainTile(int x, int y, sf::Texture* tex);
 	~TerrainTile();
-	void Draw(sf::Vector2i camOffset, sf::RenderWindow* rw);
+	void Draw(sf::RenderWindow* rw);
 	int(&GetHeight())[4];
 	void Raise(int elevation, int corner);
 	void SetHeight(int elevation, int corner);
