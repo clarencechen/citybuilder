@@ -8,7 +8,7 @@
 
 Zone::Zone(unsigned int id, int x, int y, int z, bool preview) : Building(x, y, z, preview)
 {
-	this->type = Type::ZONE;
+	type = Type::ZONE;
     maxPopPerVariant = 5;
 /*	if(r >= 16 && r <= 18)
         maxVariants = 3;

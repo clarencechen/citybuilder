@@ -106,8 +106,8 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
 					}
 				}
 			}
-            r < 32 ?    buildings[x][y] = new Zone(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y)), preview) :
-                        buildings[x][y] = new Structure(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y)), preview);
+            r < 32 ?    buildings[x][y] = new Zone(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y), preview), preview) :
+                        buildings[x][y] = new Structure(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y), preview), preview);
             for(int i = 0; i < footprint[r].x; i++)
                 for(int j = 0; j < footprint[r].y; j++)
                     buildings[x + i][y - j] = buildings[x][y];
@@ -238,26 +238,21 @@ int Level::GetHeight(int x, int y, int corner)
 		return GetTile(x, y)->GetHeight()[corner];
 }
 
-int Level::GradeBuilding(sf::IntRect bounds)
+int Level::GradeBuilding(sf::IntRect bounds, bool preview)
 {
-    //modify bounds to within map
-    bounds.left = bounds.left < 0 ? 0 : bounds.left;
-    bounds.top = bounds.top < 0 ? 0 : bounds.top;
-    bounds.width = bounds.left +bounds.width < GetWidth() ? bounds.width : GetWidth() -bounds.left;
-    bounds.height = bounds.top +bounds.height < GetWidth() ? bounds.height : GetWidth() -bounds.top;
     int plotavg = 0;
-    for(int i = bounds.left; i < bounds.width; i++)
+    for(int i = bounds.left; i < bounds.left +bounds.width; i++)
 	{
-		for(int j = bounds.top; j < bounds.height; j++)
+		for(int j = bounds.top; j < bounds.top +bounds.height; j++)
 		{
-				int tileavg = (GetTile(i, j)->GetHeight()[0] +GetTile(i, j)->GetHeight()[1] +GetTile(i, j)->GetHeight()[2] +GetTile(i, j)->GetHeight()[3])/4;
+				int tileavg = (GetHeight(i, j, 0) +GetHeight(i, j, 1) +GetHeight(i, j, 2) +GetHeight(i, j, 3))/4;
 				plotavg += tileavg;
 		}
 	}
 	plotavg /= bounds.width * bounds.height;
-	for(int i = bounds.left ; i < bounds.width +1; i++)
-		for(int j = bounds.top ; j < bounds.height +1; j++)
-            if(plotavg -(GetTile(i, j)->GetHeight()[1]))
-                Terraform(i, j, plotavg -(GetTile(i, j)->GetHeight()[1]));
+	for(int i = bounds.left; i < bounds.left +bounds.width + 1; i++)
+		for(int j = bounds.top; j < bounds.top +bounds.height + 1; j++)
+            if(plotavg -GetHeight(i, j, 1) != 0)
+                Terraform(i, j, preview ? 0 : plotavg -GetHeight(i, j, 1));
 	return plotavg;
 }

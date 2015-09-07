@@ -120,7 +120,6 @@ void Level::LoadLevel(std::string filename, ImageManager& imageManager)
     {
         for(int j = 0; j < h; j++)
             map[i][j] = new TerrainTile(i, j, tex);
-     //   std::cout << "Created tile row " << i << std::endl;
     }
 }
 void Level::Shuffle()

@@ -101,7 +101,6 @@ void Engine::ProcessInput()
 	//Loop through all window events
 	while(window->pollEvent(evt))
 	{
-
 		if(evt.type == sf::Event::Closed)
 			window->close();
 		if(evt.type == sf::Event::Resized)
@@ -131,7 +130,6 @@ void Engine::ProcessInput()
                         std::cout   << "Stored Goods: " << currentLevel->GetBuilding(coords.x, coords.y)->GetPop().y << std::endl;
                         std::cout   << "Production: " << currentLevel->GetBuilding(coords.x, coords.y)->GetPop().z << std::endl;
                     }
-
 					else
 						std::cout << "This Tile is vacant." << std::endl;
 				}
@@ -221,9 +219,9 @@ void Engine::ProcessInput()
 		if(evt.type == sf::Event::MouseWheelScrolled)
 		{
 			if(evt.mouseWheelScroll.delta < 0)
-				epsilon = sqrt(2.f);
+				epsilon *= sqrt(2.f);
 			else
-				epsilon = sqrt(0.5f);
+				epsilon *= sqrt(0.5f);
 		}
 	}
 }
@@ -256,13 +254,13 @@ void Engine::FindCoord(sf::Vector2f& mouse)
 void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 {
         if(code == sf::Keyboard::Left)
-            delta = sf::Vector2f(-view->getSize().x, 0) / 25.0f;
+            delta += sf::Vector2f(-view->getSize().x, 0) / 25.0f;
         else if(code == sf::Keyboard::Right)
-            delta = sf::Vector2f(view->getSize().x, 0) / 25.0f;
+            delta += sf::Vector2f(view->getSize().x, 0) / 25.0f;
         else if(code == sf::Keyboard::Up)
-            delta = sf::Vector2f(0, -view->getSize().y) / 25.0f;
+            delta += sf::Vector2f(0, -view->getSize().y) / 25.0f;
         else if(code == sf::Keyboard::Down)
-            delta = sf::Vector2f(0, view->getSize().y) / 25.0f;
+            delta += sf::Vector2f(0, view->getSize().y) / 25.0f;
         //small road
         else if(code == sf::Keyboard::R)
             mode = 1;
@@ -353,7 +351,6 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 
 void Engine::MoveCamera(float speed)
 {
-    std::cout << view->getCenter().x << " " << view->getCenter().y << " " << std::endl;
     //Euclidean distance
 	float d = sqrt(delta.x*delta.x + delta.y*delta.y);
 	//Velocity magnitudes

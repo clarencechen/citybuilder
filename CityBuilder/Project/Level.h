@@ -44,7 +44,7 @@ public:
 
 	void Terraform(int x, int y, int raise);
 	int GetHeight(int x, int y, int corner);
-	int GradeBuilding(sf::IntRect bounds);
+	int GradeBuilding(sf::IntRect bounds, bool preview);
 
 	std::vector<Draggable*> GetBridge(unsigned int x, unsigned int y);
 	Draggable* GetBridge(unsigned int x, unsigned int y, int z);

@@ -5,7 +5,7 @@
 unsigned int constexpr Structure::maxPopRef[8];
 Structure::Structure(unsigned int id, int x, int y, int z, bool preview) : Building(x, y, z, preview)
 {
-	this->type = Type::STRUCTURE;
+	type = Type::STRUCTURE;
 	this->id = id;
 	idbuffer = preview ? 0 : id;
 	maxPopServed = Structure::maxPopRef[id -32];
