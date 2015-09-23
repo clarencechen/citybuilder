@@ -4,6 +4,7 @@
 #include "Tile.h"
 #include <math.h>
 #include <SFML\Graphics.hpp>
+#include <TGUI\TGUI.hpp>
 #include <iostream>
 #include <set>
 
@@ -23,6 +24,7 @@ Engine::~Engine()
 {
 	delete currentCity;
 	delete currentLevel;
+	delete gui;
 	delete view;
 	delete window;
 }
@@ -33,17 +35,36 @@ bool Engine::Init()
 	simSpeed = 2;
 	currentZ = 0;
 	stick = true;
-	sf::Vector2f center(0, 0);
 	window = new sf::RenderWindow(sf::VideoMode(videoSize.x, videoSize.y, 32), "Citybuilder");
+
 	sf::Vector2f fVideoSize(videoSize);
-	view = new sf::View(center, fVideoSize);
+	view = new sf::View(sf::Vector2f(0, 0), fVideoSize);
 	window->setView(*view);
-	if(!window)
+
+	gui = new tgui::Gui(*window);
+	gui->setGlobalFont("..\\..\\..\\..\\TGUI-0.7\\fonts\\DejaVuSans.ttf");
+	//what if directory needs to change?
+
+	if(!window || !gui)
 		return false;
-    std::cout << "Finished constructing window." << std::endl;
+    std::cout << "Finished constructing window and GUI." << std::endl;
+
 	currentLevel = new Level();
 	currentLevel->LoadLevel("level1.xml", imageManager);
 	currentCity = new City();
+
+	menu = std::make_shared<tgui::MenuBar>();
+	menu->setSize(view->getSize().x, 20);
+	menu->setPosition(0, 0);
+	for(int i = 0; i < 7; i++)
+	{
+		menu->addMenu(menutext[0][i]);
+		for(int j = 1; j < 9; j++)
+			if(menutext[j][i].compare("") != 0)
+				menu->addMenuItem(menutext[0][i], menutext[j][i]);
+	}
+	menu->connectEx("MenuItemClicked", &Engine::ProcessMenuInput, this);
+	gui->add(menu, "Menu");
 	return true;
 }
 
@@ -92,6 +113,7 @@ void Engine::RenderFrame()
 		}
     }
     alreadyDone.clear();
+    gui->draw();
 	window->display();
 }
 
@@ -101,6 +123,7 @@ void Engine::ProcessInput()
 	//Loop through all window events
 	while(window->pollEvent(evt))
 	{
+		gui->handleEvent(evt);
 		if(evt.type == sf::Event::Closed)
 			window->close();
 		if(evt.type == sf::Event::Resized)
@@ -250,7 +273,61 @@ void Engine::FindCoord(sf::Vector2f& mouse)
 	int height = currentLevel->GetHeight((int)mouse.x, (int)mouse.y, 1);
 	mouse += sf::Vector2f(-(float)height/4, (float)height/4);
 }
-
+void Engine::ProcessMenuInput(const tgui::Callback& callback)
+{
+	switch(callback.index)
+	{
+	case 0:
+		if(callback.text == "Raise Terrain")
+			mode = 65;
+		else if(callback.text == "Lower Terrain")
+			mode = 66;
+		break;
+	case 1://modes 1 to 12 and 25 to 31
+		if(callback.text == "Small Road")
+			mode = 1;
+		else if(callback.text == "Large Road")
+			mode = 2;
+		else if(callback.text == "Light Rail/Metro")
+			mode = 8;
+		break;
+	case 2://modes 16 to 24
+		if(callback.text == "Residential Zone")
+			mode = 19;
+		else if(callback.text == "Commercial Zone")
+			mode = 20;
+		else if(callback.text == "Industrial Zone")
+			mode = 21;
+		break;
+	case 3://modes 13 to 16 and 48 to 63
+		if(callback.text == "Power Plant")
+			mode = 44;
+		break;
+	case 4://modes 32 to 47
+		if(callback.text == "Fire Station")
+			mode = 35;
+		else if(callback.text == "Police Station")
+			mode = 34;
+		else if(callback.text == "Elementary School")
+			mode = 33;
+		else if(callback.text == "High School")
+			mode = 37;
+		else if(callback.text == "Museum")
+			mode = 32;
+		//else if(callback.text == "Library")
+			//mode = 38;
+		else if(callback.text == "Hospital")
+			mode = 36;
+		//else if(callback.text == "Park")
+			//mode = 39;
+		break;
+	case 5:
+		if(callback.text == "Query")
+			mode = 0;
+		else if(callback.text == "Demolish")
+			mode = 64;
+	}
+}
 void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 {
         if(code == sf::Keyboard::Left)
@@ -269,7 +346,7 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 			mode = 2;
 		//rail
 		else if(code == sf::Keyboard::T)
-			mode = 3;
+			mode = 8;
 		//museum
 		else if(code == sf::Keyboard::M)
 			mode = 32;
@@ -288,10 +365,13 @@ void Engine::ProcessKeyInput(sf::Keyboard::Key code)
 		//high school
 		else if(code == sf::Keyboard::J)
 			mode = 37;
-        //demolish
+		//power plant
+		else if(code == sf::Keyboard::V)
+			mode = 44;
+        //query
         else if(code == sf::Keyboard::Escape)
             mode = 0;
-        //query
+        //demolish
         else if(code == sf::Keyboard::Tilde)
 			mode = 64;
 		//lower terrain

@@ -30,6 +30,7 @@ private:
 	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),
 	sf::Vector2u(2,2),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),
 	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),	sf::Vector2u(2,2),
+	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(1,1),	sf::Vector2u(2,3),
 	};
 	void SetDimensions(int w, int h);
 
@@ -41,7 +42,7 @@ public:
 	void Place(int x, int y, int z, unsigned int r, bool preview);
 
 	Building*(&GetNeighbors(unsigned int x, unsigned int y, int z, bool stick))[4];
-
+	bool IsAvail(int x, int y, bool preview);
 	void Terraform(int x, int y, int raise);
 	int GetHeight(int x, int y, int corner);
 	int GradeBuilding(sf::IntRect bounds, bool preview);

@@ -2,6 +2,7 @@
 #define _ENGINE_H
 
 #include <SFML\Graphics.hpp>
+#include <TGUI\TGUI.hpp>
 #include <set>
 #include "Level.h"
 #include "City.h"
@@ -32,9 +33,21 @@ class Engine
 private:
 	std::set<unsigned int> alreadyDone;
 	static const int tilesize = 32;
+	const std::string menutext[9][7] = {{"Terraforming", "Transport", "Zoning", "Utilities", "Services", "City", "File"},
+										{"Raise Terrain", "Small Road", "Residential Zone", "Power Plant", "Fire Station", "Query", "New City"},
+										{"Lower Terrain", "Large Road", "Commercial Zone", "Power Lines", "Police Station", "Demolish", "Load City"},
+										{"Plant Trees", "Small One-Way Road", "Industrial Zone", "Water Pump", "Elementary School", "Budget", "Save City"},
+										{"Place Water", "Large One-Way Road", "", "Water Pipes", "High School", "Statistics", "Game Options"},
+										{"Set Reserve", "Light Rail/Metro", "", "Sewer Outflow", "Museum", "Data Overlay", ""},
+										{"", "LRT/Metro Station", "", "Sewer Treatment", "Library", "Trip Query", ""},
+										{"", "Bus Stop", "", "Landfill", "Hospital", "", ""},
+										{"", "", "", "Recycling Center", "Park", "", ""}
+									   };
 	//SFML Render Window
 	sf::RenderWindow* window;
 	ImageManager imageManager;
+	tgui::Gui* gui;
+	tgui::MenuBar::Ptr menu;
 
 	//Render Window (and Camera) size
 	sf::Vector2i videoSize;
@@ -65,6 +78,7 @@ private:
 	sf::Vector2i FindTile(sf::Vector2f mouse);
 	sf::Vector2i FindPoint(sf::Vector2f mouse);
 	void FindCoord(sf::Vector2f& mouse);
+	void ProcessMenuInput(const tgui::Callback& callback);
 	void ProcessKeyInput(sf::Keyboard::Key);
 	//Updates all Engine internals
 	void MoveCamera(float speed);

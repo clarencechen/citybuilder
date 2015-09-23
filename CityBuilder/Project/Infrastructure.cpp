@@ -89,23 +89,9 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
         else if(r >= 16 && r < 64)
         {
 			for(int i = 0; i < footprint[r].x; i++)
-			{
 				for(int j = 0; j < footprint[r].y; j++)
-				{
-					if(x + i < 0 || y - j < 0 || x + i >= w || y - j >= h)
-					{
-						if(!preview)
-							std::cout << "Building footprint out of bounds" << std::endl;
+					if(!IsAvail(x + i, y - j, preview))
 						return;
-					}
-					else if(GetBuilding(x + i, y - j) && !GetBuilding(x + i, y - j)->GetPreview())
-					{
-						if(!preview)
-							std::cout << "Tile occupied" << std::endl;
-						return;
-					}
-				}
-			}
             r < 32 ?    buildings[x][y] = new Zone(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y), preview), preview) :
                         buildings[x][y] = new Structure(r, x, y, GradeBuilding(sf::IntRect(x, y -footprint[r].y, footprint[r].x, footprint[r].y), preview), preview);
             for(int i = 0; i < footprint[r].x; i++)
@@ -209,24 +195,40 @@ Building* Level::GetBuilding(unsigned int x, unsigned int y)
     else
         return 0;
 }
+bool Level::IsAvail(int x, int y, bool preview)
+{
+	if(x < 0 || x >= w || y < 0 || y >= h)
+	{
+		if(!preview)
+			std::cout << "Building footprint out of bounds" << std::endl;
+		return false;
+	}
+	else if (GetBuilding(x, y) && !GetBuilding(x, y)->GetPreview())
+	{
+		if(!preview)
+			std::cout << "Tile occupied" << std::endl;
+		return false;
+	}
+	return true;
+}
 //raise is always 1 or -1
 void Level::Terraform(int x, int y, int raise)
 {
-	bool valid = GetTile(x - 1, y + 1) && GetTile(x - 1, y) && GetTile(x, y) && GetTile(x, y + 1);
-	if(!valid)
+	if(!(IsAvail(x - 1, y + 1, raise ? false : true) && IsAvail(x - 1, y, raise ? false : true) && IsAvail(x, y, raise ? false : true) && IsAvail(x, y + 1, raise ? false : true)))
 		return;
 	GetTile(x, y)->Raise(raise, 1);
 	GetTile(x, y + 1)->Raise(raise, 0);
 	GetTile(x - 1, y + 1)->Raise(raise, 3);
 	GetTile(x - 1, y)->Raise(raise, 2);
 	if(abs(GetHeight(x, y, 1) -GetHeight(x, y, 2)) == 4)
-		Terraform(x + 1, y, raise);
+		Terraform(x + 1, y, 1);
 	if(abs(GetHeight(x, y + 1, 0) -GetHeight(x, y + 1, 1)) == 4)
-		Terraform(x, y + 1, raise);
+		Terraform(x, y + 1, 1);
 	if(abs(GetHeight(x - 1, y + 1, 3) -GetHeight(x - 1, y + 1, 0)) == 4)
-		Terraform(x - 1, y, raise);
+		Terraform(x - 1, y, 1);
 	if(abs(GetHeight(x - 1, y, 2) -GetHeight(x - 1, y, 3)) == 4)
-		Terraform(x, y - 1, raise);
+		Terraform(x, y - 1, 1);
+	return;
 }
 unsigned int Level::GetShuffled(unsigned int i)
 {

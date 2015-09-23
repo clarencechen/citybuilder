@@ -23,7 +23,7 @@ TerrainTile::~TerrainTile()
 void TerrainTile::Draw(sf::RenderWindow* rw)
 {
 	sf::VertexArray quad(sf::Quads, 4);
-	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize	,
+	quad[1].position = sf::Vector2f(y*tilesize		+x*tilesize,
 									y*tilesize/2	-x*tilesize/2																	-z[1]*tilesize/4);
 	quad[2].position = sf::Vector2f(y*tilesize		+x*tilesize		+(int)(texture->getSize().y),
 									y*tilesize/2	-x*tilesize/2	-(int)(texture->getSize().y)/2									-z[2]*tilesize/4);

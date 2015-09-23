@@ -56,6 +56,7 @@
 		<tile x="0" y="0" frames="1" size="3" id="128"/>
 		<tile x="3" y="0" frames="1" size="3" id="129"/>
 		<tile x="6" y="0" frames="1" size="3" id="130"/>
+		<tile x="9" y="0" frames="1" size="4" id="140"/>
 
 		<tile x="0" y="3" frames="1" size="3" id="131"/>
 		<tile x="3" y="3" frames="1" size="3" id="132"/>

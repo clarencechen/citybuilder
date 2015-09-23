@@ -2,7 +2,7 @@
 #include <math.h>
 #include "Building.h"
 #include "Structure.h"
-unsigned int constexpr Structure::maxPopRef[8];
+unsigned int constexpr Structure::maxPopRef[16];
 Structure::Structure(unsigned int id, int x, int y, int z, bool preview) : Building(x, y, z, preview)
 {
 	type = Type::STRUCTURE;
@@ -24,5 +24,7 @@ sf::Vector2u Structure::GetDisplayTile(Level* level)
 
 sf::Vector2u Structure::GetFootprint()
 {
+	if(id == 44)
+		return sf::Vector2u(2, 3);
 	return sf::Vector2u(2, 2);
 }

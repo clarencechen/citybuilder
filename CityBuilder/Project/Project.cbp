@@ -20,6 +20,7 @@
 					<Add library="sfml-graphics-d" />
 					<Add library="sfml-window-d" />
 					<Add library="sfml-system-d" />
+					<Add library="tgui-d" />
 					<Add directory="../../../../SFML-2.3/bin" />
 				</Linker>
 			</Target>
@@ -38,12 +39,14 @@
 					<Add library="sfml-graphics" />
 					<Add library="sfml-window" />
 					<Add library="sfml-system" />
+					<Add library="tgui" />
 				</Linker>
 			</Target>
 		</Build>
 		<Compiler>
 			<Add option="-std=c++11" />
-			<Add directory="../../../../SFML-2.3/include" />
+			<Add directory="../../../../SFML-2.3.2/include" />
+			<Add directory="../../../../TGUI-0.7/include" />
 		</Compiler>
 		<Linker>
 			<Add library="mingw32" />
@@ -51,7 +54,8 @@
 			<Add library="gdi32" />
 			<Add library="winmm" />
 			<Add library="dxguid" />
-			<Add directory="../../../../SFML-2.3/lib" />
+			<Add directory="../../../../SFML-2.3.2/lib" />
+			<Add directory="../../../../TGUI-0.7/lib" />
 		</Linker>
 		<Unit filename="Building.cpp" />
 		<Unit filename="Building.h" />

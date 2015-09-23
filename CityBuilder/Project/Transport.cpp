@@ -33,7 +33,7 @@ Draggable::Draggable(unsigned int r, int x, int y, int z[4], bool preview, Level
 		roadBuffer = preview ? 0 : 2;
 		break;
 	}
-	case 3:
+	case 8:
 	{
 		railState = 1;
 		roadState = 0;
@@ -73,7 +73,7 @@ Draggable::Draggable(unsigned int r, int x, int y, int z, bool preview, Level* l
 		roadBuffer = preview ? 0 : 2;
 		break;
 	}
-	case 3:
+	case 8:
 	{
 		railState = 1;
 		roadState = 0;
@@ -131,7 +131,7 @@ void Draggable::Add(unsigned int id, bool preview)
 		if(!preview)
 			roadBuffer = 2;
 		break;
-	case 3:
+	case 8:
 		railState = 1;
 		if(!preview)
 			railBuffer = 1;
