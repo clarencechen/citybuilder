@@ -15,7 +15,7 @@ void Level::Place(int x, int y, int z, bool stick, unsigned int r, bool preview)
 		Building* b = stick ? GetBuilding(x, y) : GetBridge(x, y, z);
 		if(r == 64 && b) //delete tool
 		{
-			sf::Vector2u anchor = b->GetAnchor();
+			sf::Vector2i anchor = sf::Vector2i(b->GetAnchor());
 			if(preview)
             {
  				b->Condemn();
@@ -221,13 +221,13 @@ void Level::Terraform(int x, int y, int raise)
 	GetTile(x - 1, y + 1)->Raise(raise, 3);
 	GetTile(x - 1, y)->Raise(raise, 2);
 	if(abs(GetHeight(x, y, 1) -GetHeight(x, y, 2)) == 4)
-		Terraform(x + 1, y, 1);
+		Terraform(x + 1, y, raise < 0 ? -1 : 1);
 	if(abs(GetHeight(x, y + 1, 0) -GetHeight(x, y + 1, 1)) == 4)
-		Terraform(x, y + 1, 1);
+		Terraform(x, y + 1, raise < 0 ? -1 : 1);
 	if(abs(GetHeight(x - 1, y + 1, 3) -GetHeight(x - 1, y + 1, 0)) == 4)
-		Terraform(x - 1, y, 1);
+		Terraform(x - 1, y, raise < 0 ? -1 : 1);
 	if(abs(GetHeight(x - 1, y, 2) -GetHeight(x - 1, y, 3)) == 4)
-		Terraform(x, y - 1, 1);
+		Terraform(x, y - 1, raise < 0 ? -1 : 1);
 	return;
 }
 unsigned int Level::GetShuffled(unsigned int i)

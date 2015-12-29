@@ -79,28 +79,29 @@ void Engine::RenderFrame()
 	TerrainTile* tile;
 	Building* building;//Makes sure we do not draw multiple identical buildings
 	std::vector<Draggable*> column;
-	//Figure out how much to offset each tile
-	//Loop through and draw each tile
-	//We're keeping track of two variables in each loop. How many tiles
-	//we've drawn (x and y), and which tile on the map we're drawing (tileX
-	//and tileY)
-	for(int y = 0, tileY = 0; y <= currentLevel->GetHeight(); y++, tileY++)
+	//rendering starts at (0,64) and goes down diagonally by x = y + a where a decreases from w to -w
+	int d = currentLevel->GetWidth() -currentLevel->GetHeight();
+	for(int a = currentLevel->GetWidth() - 1; a > -currentLevel->GetHeight(); a--)
 	{
-		for(int x = 0, tileX = currentLevel->GetWidth(); x <= currentLevel->GetWidth(); x++, tileX--)
+		for(int y = a < 0 ? -a : 0; y < (d < 0
+										? (a > d ? currentLevel->GetHeight() : currentLevel->GetHeight() + a)
+										: (a < d ? currentLevel->GetHeight() : currentLevel->GetWidth() - a)); y++)
 		{
 			//Get the tile we're drawing
-			tile = currentLevel->GetTile(tileX, tileY);
+			tile = currentLevel->GetTile(y +a, y);
 			if(tile)
 				tile->Draw(window);
 		}
 	}
-	for(int y = 0, tileY = 0; y <= currentLevel->GetHeight(); y++, tileY++)
+	for(int a = currentLevel->GetWidth() - 1; a > -currentLevel->GetHeight(); a--)
 	{
-		for(int x = 0, tileX = currentLevel->GetWidth(); x <= currentLevel->GetWidth(); x++, tileX--)
+		for(int y = a < 0 ? -a : 0; y < (d < 0
+										? (a > d ? currentLevel->GetHeight() : currentLevel->GetHeight() + a)
+										: (a < d ? currentLevel->GetHeight() : currentLevel->GetWidth() - a)); y++)
 		{
 			//Get the building we're drawing
-			building = currentLevel->GetBuilding(tileX, tileY);
-			column = currentLevel->GetBridge(tileX, tileY);
+			building = currentLevel->GetBuilding(y +a, y);
+			column = currentLevel->GetBridge(y +a, y);
 			//check if building exists has not already been drawn
 			if(building && !(alreadyDone.count(building->GetAnchor().x*currentLevel->GetHeight() +building->GetAnchor().y)))
             {

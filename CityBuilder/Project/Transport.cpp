@@ -176,19 +176,20 @@ void Draggable::MatchNetwork(bool preview, Level* level)
         if(one)
 			SetRoad(1, preview);
     }
+    //needs improvement
     else if(roadState && railState == 1)
 	{
 		if(road[0] && road[2])
-			if(!(rail[1] && rail[3]))
-				SetRail(0, preview);
-			else
+			if(rail[1] && rail[3])
 				return;
+			else
+				SetRail(0, preview);
 		else if(road[3] && road[1])
-			if(!(rail[0] && rail[2]))
-				SetRail(0, preview);
-			else
+			if(rail[0] && rail[2])
 				return;
-		else if((rail[0] && rail[2]) || (rail[1] && rail[3]))
+			else
+				SetRail(0, preview);
+		else// if((rail[0] && rail[2]) || (rail[1] && rail[3]))
 			SetRoad(0, preview);
 	}
 }
